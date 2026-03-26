@@ -5,63 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book's Club</title>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; overflow-x: hidden; }
-header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(20,10,40,0.8); backdrop-filter: blur(8px); padding: 20px; text-align: center; font-size: 28px; font-weight: bold; color: #a78bfa; z-index: 1000; }
-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 50px; }
-h1 { font-size: 36px; margin-bottom: 20px; color: #fff; opacity: 0; transform: translateY(30px); animation: slideIn 1s forwards; }
-p { font-size: 18px; color: #ccc; max-width: 600px; text-align: center; margin-bottom: 40px; opacity: 0; transform: translateY(30px); animation: slideIn 1s 0.3s forwards; }
-button { padding: 14px 28px; border-radius: 12px; border: none; cursor: pointer; font-size: 16px; font-weight: bold; margin: 10px; transition: 0.3s; }
-button.primary { background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; }
-button.secondary { background: transparent; border: 1px solid #a78bfa; color: #a78bfa; }
-button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,250,0.4); }
-
-@keyframes slideIn {
-  to { opacity: 1; transform: translateY(0); }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; overflow-x: hidden; }
+.hero { text-align: center; margin: 120px 20px 60px; }
+.hero h1 { font-size: 38px; }
+.hero span { color: #a78bfa; }
+.hero p { color: #aaa; }
+.section { width: 90%; max-width: 500px; margin: 100px auto; opacity: 0; transform: translateX(-60px); transition: all 0.7s ease; }
+.section.right { transform: translateX(60px); }
+.section.show { opacity: 1; transform: translateX(0); }
+.section h2 { color: #c4b5fd; margin-bottom: 10px; }
+.section p { color: #aaa; }
+.card { width: 100%; background: rgba(30, 20, 50, 0.6); padding: 25px; border-radius: 18px; backdrop-filter: blur(12px); box-shadow: 0 0 40px rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.2); }
+input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: none; background: #1a1325; color: #fff; transition: 0.3s; }
+input:focus { outline: none; background: #221933; box-shadow: 0 0 10px rgba(167,139,250,0.4); }
+button { width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
+button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,250,0.5); }
+.footer { margin: 120px 0 30px; text-align: center; color: #777; font-size: 14px; }
+.swal2-popup {
+  background: #1a1325 !important;
+  color: #fff !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(167,139,250,0.2) !important;
 }
-
-.login-section { background: rgba(30,20,50,0.7); backdrop-filter: blur(12px); border-radius: 24px; padding: 40px 30px; max-width: 400px; width: 90%; text-align: center; opacity: 0; transform: translateY(50px); transition: all 1s; }
-.login-section.visible { opacity: 1; transform: translateY(0); }
-
-input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: 1px solid transparent; background: #1a1325; color: #fff; transition: 0.3s; }
-input:focus { outline: none; border-color: #a78bfa; box-shadow: 0 0 15px rgba(167,139,250,0.2); }
-
-.footer-text { margin-top: 20px; font-size: 12px; color: #666; }
-
-.swal2-popup { background: #1a1325 !important; color: #fff !important; border-radius: 18px !important; border: 1px solid rgba(167,139,250,0.2) !important; }
+.swal2-title, .swal2-html-container {
+  color: #fff !important;
+}
+.swal2-confirm {
+  background: linear-gradient(135deg, #a78bfa, #7c3aed) !important;
+  border-radius: 10px !important;
+}
 </style>
 </head>
 <body>
 
-<header>Book's Club</header>
+<div class="hero">
+  <h1>Welcome to <span>Book's Club</span></h1>
+  <p>Your personal reading world</p>
+</div>
 
-<section>
-  <h1>Welcome to Book's Club</h1>
-  <p>Discover, read, and discuss your favorite books with our community. Sign in or register to start your journey!</p>
-  <button class="primary" id="scrollLogin">Sign In / Register</button>
-</section>
+<div class="section">
+  <h2>Track your books easily</h2>
+  <p>Organize everything in one place.</p>
+</div>
 
-<section id="loginSection" class="login-section">
-  <h1>Login / Register</h1>
-  <input type="email" id="email" placeholder="Email Address">
-  <input type="password" id="password" placeholder="Password">
-  <button class="primary" id="loginBtn">Sign In / Register</button>
-  <button class="secondary" id="registerBtn">Create New Account</button>
-  <div class="footer-text">powered by •ＵᏒ-１３•𓂀</div>
-</section>
+<div class="section right">
+  <h2>Upload your PDFs</h2>
+  <p>Keep all your readings safe.</p>
+</div>
+
+<div class="section">
+  <h2>Follow your progress</h2>
+  <p>See how much you've read.</p>
+</div>
+
+<div class="section right">
+  <div class="card">
+    <h2>Login / Sign Up</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn">Continue</button>
+  </div>
+</div>
+
+<div class="footer">
+  powered by •ＵᏒ-１３•𓂀
+</div>
+
+<script>
+const sections = document.querySelectorAll('.section');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('show');
+  });
+}, { threshold: 0.1 });
+sections.forEach(sec => observer.observe(sec));
+</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword, 
-    GoogleAuthProvider, 
-    signInWithPopup, 
-    sendEmailVerification 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
@@ -74,59 +99,41 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
-// Scroll to login section
-document.getElementById('scrollLogin').onclick = () => {
-    const login = document.getElementById('loginSection');
-    login.classList.add('visible');
-    login.scrollIntoView({ behavior: 'smooth' });
-};
+const emailInput = document.getElementById('email');
+const passInput = document.getElementById('password');
+const btn = document.getElementById("loginBtn");
 
-// Login/Register functionality
-document.getElementById('loginBtn').onclick = () => {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if(!email || !password) return Swal.fire({ icon: 'warning', text: 'Please fill in all fields' });
+btn.addEventListener("click", () => {
+  const email = emailInput.value;
+  const password = passInput.value;
+  if(!email || !password) {
+    Swal.fire({ icon: 'warning', title: 'Oops...', text: 'Please enter both email and password!' });
+    return;
+  }
 
-    Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+  Swal.fire({ title: 'Connecting...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
-    signInWithEmailAndPassword(auth, email, password)
-        .then(res => {
-            if(res.user.emailVerified || res.user.providerData[0]?.providerId === 'google.com') {
-                Swal.close();
-                Swal.fire({ icon: 'success', text: 'Logged in successfully!' });
-            } else {
-                Swal.fire({ icon: 'warning', text: 'Verify your email first!' });
-            }
-        })
-        .catch(error => {
-            if(error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then(res => {
-                        sendEmailVerification(res.user);
-                        Swal.fire({ icon: 'success', text: 'Account created! Verification sent ✅' });
-                    })
-                    .catch(err => Swal.fire({ icon: 'error', text: err.message }));
-            } else {
-                Swal.fire({ icon: 'error', text: error.message });
-            }
-        });
-};
-
-// Register button
-document.getElementById('registerBtn').onclick = () => {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if(!email || !password) return Swal.fire({ icon: 'warning', text: 'Please fill in all fields!' });
-
-    createUserWithEmailAndPassword(auth, email, password)
-        .then(res => {
-            sendEmailVerification(res.user);
-            Swal.fire({ icon: 'success', text: 'Verification link sent! ✅' });
-        })
-        .catch(err => Swal.fire({ icon: 'error', text: err.message }));
-};
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => { 
+      Swal.fire({ icon: 'success', title: 'Welcome Back!', text: 'Logged in successfully 🔥', timer: 2000, showConfirmButton: false });
+    })
+    .catch((error) => {
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+              Swal.fire({ icon: 'success', title: 'Welcome!', text: 'Account created successfully ✅', timer: 2000, showConfirmButton: false });
+            })
+            .catch(err => {
+              Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+            });
+      } else {
+          Swal.fire({ icon: 'error', title: 'Error', text: error.message });
+      }
+    });
+});
 </script>
+
 </body>
 </html>
+
