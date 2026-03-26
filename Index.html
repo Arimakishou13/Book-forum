@@ -4,53 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book's Club</title>
-<link rel="icon" href="logo.png" type="image/png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;overflow-x:hidden;transition:all .4s;}
-.dark-mode{background:linear-gradient(135deg,#0b0b0f,#1c1c2a);color:white;}
-.light-mode{background:linear-gradient(135deg,#f0f0f0,#d9d9ff);color:#111;}
-.navbar {display: flex;align-items: center;justify-content: space-between;padding: 15px 30px;background: rgba(0,0,0,0.5);backdrop-filter: blur(12px);position: sticky;top: 0;z-index: 10;border-bottom: 1px solid rgba(200,132,252,0.3);}
-.navbar h2 {color:#c084fc;font-size:26px;margin-right:25px;}
-.nav-links {display:flex;align-items:center;gap:12px;}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;overflow-x:hidden;}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px 30px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid rgba(200,132,252,0.3);
+}
+
+.navbar h2 {
+  color: #c084fc;
+  font-size: 26px;
+  margin-right: 25px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .nav-links a{color:white;text-decoration:none;font-weight:bold;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:10px;transition:.3s;background:rgba(255,255,255,0.05);font-size: 14px;}
 .nav-links a:hover{background:rgba(168,85,247,0.2);}
 .nav-links img{width:35px;height:35px;border-radius:50%;border:2px solid #c084fc;object-fit:cover;}
-.controls {display:flex;gap:10px;}
-button{cursor:pointer;padding:6px 12px;border:none;border-radius:8px;background:#a855f7;color:white;transition:.3s;font-weight:bold;position:relative;overflow:hidden;}
-button::after{content:"";position:absolute;left:50%;top:50%;width:300%;height:300%;background:rgba(255,255,255,0.2);transition:.5s;border-radius:50%;transform:translate(-50%,-50%) scale(0);z-index:0;}
-button:hover::after{transform:translate(-50%,-50%) scale(1);}
-button span{position:relative;z-index:1;}
-button:active{transform:scale(0.95);}
+
 .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px;}
 .hero h1{font-size:48px;color:#d8b4fe;margin-bottom:15px;animation:fadeUp 1s ease;}
 .hero p{color:#ccc;margin-bottom:25px;animation:fadeUp 1.2s ease;}
 .go-login{display:inline-block;padding:18px 50px;font-size:20px;font-weight:bold;color:white;background:linear-gradient(135deg,#a855f7,#c084fc);border-radius:15px;cursor:pointer;transition:.3s;box-shadow:0 10px 25px rgba(168,85,247,0.6);animation:bounce 1s infinite alternate;}
 .go-login:hover{transform:scale(1.1);box-shadow:0 15px 30px rgba(168,85,247,0.8);}
+
 .login-card{background:rgba(30,31,63,0.95);padding:30px;border-radius:20px;width:350px;margin-top:30px;display:none;flex-direction:column;align-items:center;box-shadow:0 10px 25px rgba(168,85,247,0.5);}
 .login-card input{width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;}
 .login-card button{width:100%;padding:12px;margin-top:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;transition:.3s;}
 .login-card button:hover{background:#c084fc;}
+
 .section{padding:60px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
 .card{background:rgba(255,255,255,0.05);padding:25px;border-radius:15px;transform:translateY(50px);opacity:0;transition:.6s;}
 .card.show{transform:translateY(0);opacity:1;}
 .card:hover{transform:translateY(-8px) scale(1.02);background:rgba(168,85,247,0.2);}
+
 .footer{text-align:center;padding:25px;color:#aaa;}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
 @keyframes bounce{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
 </style>
 </head>
-<body class="dark-mode">
+<body>
 
 <div class="navbar">
   <h2>Home</h2>
   <div class="nav-links">
+    <a href="login.html">Login</a>
     <a href="register.html">Register</a>
     <a href="profile.html" id="profileLink">
       <span id="profileNameNav">Guest</span>
       <img id="profileIcon" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile">
     </a>
-    <button id="modeBtn"><span>🌙</span></button>
   </div>
 </div>
 
@@ -112,7 +131,7 @@ onAuthStateChanged(auth,user=>{
   } else {
     profileIcon.src="https://cdn-icons-png.flaticon.com/512/149/149071.png";
     profileNameNav.textContent="Guest";
-    profileLink.href="register.html";
+    profileLink.href="login.html";
   }
 });
 
@@ -130,13 +149,6 @@ loginBtn.addEventListener("click",()=>{
 </script>
 
 <script>
-const modeBtn = document.getElementById("modeBtn");
-modeBtn.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  document.body.classList.toggle("light-mode");
-  modeBtn.querySelector("span").textContent = document.body.classList.contains("dark-mode") ? "🌙" : "☀️";
-});
-
 const cards=document.querySelectorAll(".card");
 window.addEventListener("scroll",()=>{
   cards.forEach(card=>{
