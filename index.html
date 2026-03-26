@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book's Club</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * { box-sizing: border-box; }
 body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; overflow-x: hidden; }
@@ -22,6 +23,21 @@ input:focus { outline: none; background: #221933; box-shadow: 0 0 10px rgba(167,
 button { width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
 button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,250,0.5); }
 .footer { margin: 120px 0 30px; text-align: center; color: #777; font-size: 14px; }
+
+/* SweetAlert2 Dark Theme Customization */
+.swal2-popup {
+  background: #1a1325 !important;
+  color: #fff !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(167,139,250,0.2) !important;
+}
+.swal2-title, .swal2-html-container {
+  color: #fff !important;
+}
+.swal2-confirm {
+  background: linear-gradient(135deg, #a78bfa, #7c3aed) !important;
+  border-radius: 10px !important;
+}
 </style>
 </head>
 <body>
@@ -48,10 +64,10 @@ button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,25
 
 <div class="section right">
   <div class="card">
-    <h2>Login</h2>
+    <h2>Login / Sign Up</h2>
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
-    <button id="loginBtn">Login</button>
+    <button id="loginBtn">Continue</button>
   </div>
 </div>
 
@@ -93,17 +109,30 @@ const btn = document.getElementById("loginBtn");
 btn.addEventListener("click", () => {
   const email = emailInput.value;
   const password = passInput.value;
-  if(!email || !password) return;
+  if(!email || !password) {
+    Swal.fire({ icon: 'warning', title: 'Oops...', text: 'Please enter both email and password!' });
+    return;
+  }
+
+  // Show Loading
+  Swal.fire({ title: 'Connecting...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => { alert("Logged in 🔥"); })
+    .then(() => { 
+      Swal.fire({ icon: 'success', title: 'Welcome Back!', text: 'Logged in successfully 🔥', timer: 2000, showConfirmButton: false });
+    })
     .catch((error) => {
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+          // Try to create account
           createUserWithEmailAndPassword(auth, email, password)
-            .then(() => alert("Account created ✅"))
-            .catch(err => alert(err.message));
+            .then(() => {
+              Swal.fire({ icon: 'success', title: 'Welcome!', text: 'Account created successfully ✅', timer: 2000, showConfirmButton: false });
+            })
+            .catch(err => {
+              Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+            });
       } else {
-          alert(error.message);
+          Swal.fire({ icon: 'error', title: 'Error', text: error.message });
       }
     });
 });
