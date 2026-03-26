@@ -23,69 +23,33 @@ input:focus { outline: none; background: #221933; box-shadow: 0 0 10px rgba(167,
 button { width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
 button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,250,0.5); }
 .footer { margin: 120px 0 30px; text-align: center; color: #777; font-size: 14px; }
-.swal2-popup {
-  background: #1a1325 !important;
-  color: #fff !important;
-  border-radius: 18px !important;
-  border: 1px solid rgba(167,139,250,0.2) !important;
-}
-.swal2-title, .swal2-html-container {
-  color: #fff !important;
-}
-.swal2-confirm {
-  background: linear-gradient(135deg, #a78bfa, #7c3aed) !important;
-  border-radius: 10px !important;
-}
+#dashboard { display: none; text-align: center; padding: 50px 20px; }
+.logout-btn { background: #ff4d4d; margin-top: 20px; width: auto; padding: 10px 30px; }
+.swal2-popup { background: #1a1325 !important; color: #fff !important; border-radius: 18px !important; border: 1px solid rgba(167,139,250,0.2) !important; }
+.swal2-title, .swal2-html-container { color: #fff !important; }
+.swal2-confirm { background: linear-gradient(135deg, #a78bfa, #7c3aed) !important; border-radius: 10px !important; }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <h1>Welcome to <span>Book's Club</span></h1>
-  <p>Your personal reading world</p>
-</div>
-
-<div class="section">
-  <h2>Track your books easily</h2>
-  <p>Organize everything in one place.</p>
-</div>
-
-<div class="section right">
-  <h2>Upload your PDFs</h2>
-  <p>Keep all your readings safe.</p>
-</div>
-
-<div class="section">
-  <h2>Follow your progress</h2>
-  <p>See how much you've read.</p>
-</div>
-
-<div class="section right">
-  <div class="card">
-    <h2>Login / Sign Up</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button id="loginBtn">Continue</button>
+<div id="auth-ui">
+  <div class="hero">
+    <h1>Welcome to <span>Book's Club</span></h1>
+    <p>Your personal reading world</p>
   </div>
+  <div class="section show"><div class="card"><h2>Login / Sign Up</h2><input type="email" id="email" placeholder="Email"><input type="password" id="password" placeholder="Password"><button id="loginBtn">Continue</button></div></div>
 </div>
 
-<div class="footer">
-  powered by •ＵᏒ-１３•𓂀
+<div id="dashboard">
+  <div class="hero"><h1>Welcome, <span id="user-display">Reader</span>!</h1><p>Your private space.</p></div>
+  <div class="section show"><div class="card"><h2>Your Dashboard</h2><p>Library coming soon...</p><button class="logout-btn" id="logoutBtn">Logout</button></div></div>
 </div>
 
-<script>
-const sections = document.querySelectorAll('.section');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('show');
-  });
-}, { threshold: 0.1 });
-sections.forEach(sec => observer.observe(sec));
-</script>
+<div class="footer">powered by •ＵᏒ-１３•𓂀</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -100,39 +64,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const emailInput = document.getElementById('email');
-const passInput = document.getElementById('password');
-const btn = document.getElementById("loginBtn");
-
-btn.addEventListener("click", () => {
-  const email = emailInput.value;
-  const password = passInput.value;
-  if(!email || !password) {
-    Swal.fire({ icon: 'warning', title: 'Oops...', text: 'Please enter both email and password!' });
-    return;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    if (user.emailVerified) {
+      document.getElementById('auth-ui').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('user-display').innerText = user.email.split('@')[0];
+    } else {
+      Swal.fire({ icon: 'warning', title: 'Verify Your Email', text: 'Please check your inbox and verify your email before logging in.' });
+      signOut(auth);
+    }
+  } else {
+    document.getElementById('auth-ui').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
   }
+});
+
+document.getElementById("loginBtn").addEventListener("click", () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  if(!email || !password) return;
 
   Swal.fire({ title: 'Connecting...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => { 
-      Swal.fire({ icon: 'success', title: 'Welcome Back!', text: 'Logged in successfully 🔥', timer: 2000, showConfirmButton: false });
-    })
+    .then(() => { Swal.close(); })
     .catch((error) => {
       if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
           createUserWithEmailAndPassword(auth, email, password)
-            .then(() => {
-              Swal.fire({ icon: 'success', title: 'Welcome!', text: 'Account created successfully ✅', timer: 2000, showConfirmButton: false });
+            .then((res) => {
+              sendEmailVerification(res.user);
+              Swal.fire({ icon: 'success', title: 'Account Created', text: 'Verify link sent to your email! ✅' });
             })
-            .catch(err => {
-              Swal.fire({ icon: 'error', title: 'Error', text: err.message });
-            });
+            .catch(err => Swal.fire({ icon: 'error', title: 'Error', text: err.message }));
       } else {
           Swal.fire({ icon: 'error', title: 'Error', text: error.message });
       }
     });
 });
-</script>
 
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  signOut(auth).then(() => { Swal.fire({ icon: 'info', title: 'Logged out', timer: 1500, showConfirmButton: false }); });
+});
+</script>
 </body>
 </html>
