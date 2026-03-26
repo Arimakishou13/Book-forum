@@ -6,18 +6,109 @@
 <title>Profile - Book's Club</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;display:flex;flex-direction:column;align-items:center;min-height:100vh;}
-  .navbar{width:100%;display:flex;justify-content:space-between;align-items:center;padding:15px 50px;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);border-bottom:1px solid rgba(200,132,252,0.3);}
-  .navbar h2{color:#c084fc;font-size:28px;cursor:pointer;}
-  .profile-card{background:rgba(30,31,63,0.95);padding:40px;border-radius:25px;margin-top:50px;display:flex;flex-direction:column;align-items:center;box-shadow:0 15px 30px rgba(168,85,247,0.6);width:350px;}
-  .profile-card img{width:120px;height:120px;border-radius:50%;border:3px solid #c084fc;object-fit:cover;margin-bottom:15px;transition:.3s;}
-  .profile-card img:hover{transform:scale(1.1);}
-  .profile-card h2{color:#d8b4fe;margin-bottom:5px;}
-  .profile-card p{color:#ccc;margin-bottom:15px;}
-  .profile-card input[type="file"]{display:none;}
-  .change-btn{padding:10px 20px;background:linear-gradient(135deg,#a855f7,#c084fc);border:none;color:white;border-radius:10px;cursor:pointer;transition:.3s;margin-bottom:10px;}
-  .change-btn:hover{transform:scale(1.05);box-shadow:0 8px 20px rgba(168,85,247,0.5);}
-  .footer{text-align:center;padding:25px;color:#aaa;margin-top:auto;}
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes popUp {
+    0% { transform: translateY(30px) scale(0.9); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  body {
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#140a26,#2b1457);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  .navbar {
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 50px;
+    background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(200,132,252,0.3);
+    animation: slideDown 0.6s ease-out;
+  }
+
+  .navbar h2 {
+    color:#c084fc;
+    font-size:28px;
+    cursor:pointer;
+    transition: 0.3s;
+  }
+
+  .navbar h2:hover { color: #d8b4fe; }
+
+  .profile-card {
+    background:rgba(30,31,63,0.95);
+    padding:40px;
+    border-radius:25px;
+    margin-top:50px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    box-shadow:0 15px 30px rgba(168,85,247,0.6);
+    width:350px;
+    animation: popUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s backwards;
+    transition: 0.3s;
+  }
+
+  .profile-card:hover { box-shadow: 0 20px 45px rgba(168,85,247,0.8); }
+
+  .profile-card img {
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:3px solid #c084fc;
+    object-fit:cover;
+    margin-bottom:15px;
+    transition: 0.4s;
+  }
+
+  .profile-card img:hover { transform: scale(1.1) rotate(3deg); border-color: #d8b4fe; }
+
+  .profile-card h2 { color:#d8b4fe; margin-bottom:5px; }
+  .profile-card p { color:#ccc; margin-bottom:15px; }
+  .profile-card input[type="file"] { display:none; }
+
+  .change-btn {
+    padding:10px 20px;
+    background:linear-gradient(135deg,#a855f7,#c084fc);
+    border:none;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
+    transition: 0.3s;
+    margin-bottom:10px;
+  }
+
+  .change-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(168,85,247,0.5);
+  }
+
+  .footer {
+    text-align:center;
+    padding:25px;
+    color:#aaa;
+    margin-top:auto;
+    animation: fadeIn 1.5s ease-in;
+  }
 </style>
 </head>
 <body>
@@ -72,7 +163,6 @@ onAuthStateChanged(auth, user => {
 fileUpload.addEventListener("change", async (e) => {
   const file = e.target.files[0];
   const user = auth.currentUser;
-
   if(file && user) {
     try {
       const storageRef = ref(storage, 'profile_pics/' + user.uid);
