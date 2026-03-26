@@ -49,9 +49,9 @@ button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,25
 <div class="section right">
   <div class="card">
     <h2>Login</h2>
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
-    <button>Login</button>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn">Login</button>
   </div>
 </div>
 
@@ -61,13 +61,12 @@ button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,25
 
 <script>
 const sections = document.querySelectorAll('.section');
-window.addEventListener('scroll', () => {
-  sections.forEach(sec => {
-    const top = sec.getBoundingClientRect().top;
-    const trigger = window.innerHeight - 100;
-    if (top < trigger) sec.classList.add('show');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('show');
   });
-});
+}, { threshold: 0.1 });
+sections.forEach(sec => observer.observe(sec));
 </script>
 
 <script type="module">
@@ -76,30 +75,39 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "PUT YOUR API KEY",
-  authDomain: "PUT YOUR DOMAIN",
-  projectId: "PUT YOUR ID",
+  apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
+  authDomain: "book-club-13.firebaseapp.com",
+  projectId: "book-club-13",
+  storageBucket: "book-club-13.firebasestorage.app",
+  messagingSenderId: "321914571323",
+  appId: "1:321914571323:web:edfc6bc0ac802e6dd06a1e"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const emailInput = document.querySelector('input[type="email"]');
-const passInput = document.querySelector('input[type="password"]');
-const btn = document.querySelector("button");
+const emailInput = document.getElementById('email');
+const passInput = document.getElementById('password');
+const btn = document.getElementById("loginBtn");
 
 btn.addEventListener("click", () => {
   const email = emailInput.value;
   const password = passInput.value;
+  if(!email || !password) return;
+
   signInWithEmailAndPassword(auth, email, password)
     .then(() => { alert("Logged in 🔥"); })
-    .catch(() => {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => alert("Account created ✅"))
-        .catch(err => alert(err.message));
+    .catch((error) => {
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(() => alert("Account created ✅"))
+            .catch(err => alert(err.message));
+      } else {
+          alert(error.message);
+      }
     });
 });
 </script>
 
 </body>
-  </html>
+</html>
