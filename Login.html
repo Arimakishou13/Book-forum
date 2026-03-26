@@ -21,7 +21,7 @@ input:focus { outline: none; border-color: #a78bfa; background: #221933; box-sha
 .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #333; margin: 0 10px; }
 .social-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #1a1325; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 14px; gap: 10px; }
 .footer-text { margin-top: 25px; font-size: 12px; color: #666; }
-.swal2-popup { background: #1a1325 !important; color: #fff !important; }
+.swal2-popup { background: #1a1325 !important; color: #fff !important; border-radius: 18px !important; border: 1px solid rgba(167,139,250,0.2) !important; }
 </style>
 </head>
 <body>
@@ -62,31 +62,30 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-// دخول جوجل
 document.getElementById('googleBtn').onclick = () => {
     signInWithPopup(auth, googleProvider)
         .then(() => { window.location.href = 'index.html'; })
         .catch(err => Swal.fire({ icon: 'error', text: err.message }));
 };
 
-// تسجيل دخول عادي
 document.getElementById('loginBtn').onclick = () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     if(!email || !password) return;
+    Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
     signInWithEmailAndPassword(auth, email, password)
         .then((res) => {
             if(res.user.emailVerified) { window.location.href = 'index.html'; }
             else { Swal.fire({ icon: 'warning', text: 'Verify your email first!' }); }
         })
-        .catch(err => Swal.fire({ icon: 'error', text: 'Account not found or wrong password' }));
+        .catch(() => Swal.fire({ icon: 'error', text: 'Account not found or wrong password' }));
 };
 
-// إنشاء حساب جديد
 document.getElementById('registerBtn').onclick = () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     if(!email || !password) return;
+    Swal.fire({ title: 'Creating Account...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
     createUserWithEmailAndPassword(auth, email, password)
         .then((res) => {
             sendEmailVerification(res.user);
@@ -97,4 +96,3 @@ document.getElementById('registerBtn').onclick = () => {
 </script>
 </body>
 </html>
-
