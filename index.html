@@ -4,200 +4,60 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book's Club</title>
-
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #140a26, #2b1457);
-  color: white;
-  overflow-x: hidden;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 30px;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
-}
-
-.navbar h2 {
-  color: #c084fc;
-}
-
-.navbar a {
-  color: white;
-  margin-left: 20px;
-  text-decoration: none;
-}
-
-.hero {
-  text-align: center;
-  padding: 100px 20px;
-}
-
-.hero h1 {
-  font-size: 45px;
-  color: #d8b4fe;
-  animation: fadeUp 1s ease;
-}
-
-.hero p {
-  color: #ccc;
-  animation: fadeUp 1.5s ease;
-}
-
-.btn {
-  margin-top: 20px;
-  padding: 15px 30px;
-  background: linear-gradient(135deg, #a855f7, #c084fc);
-  border: none;
-  border-radius: 12px;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  animation: fadeUp 2s ease;
-  transition: 0.3s;
-  box-shadow: 0 8px 20px rgba(168,85,247,0.4);
-}
-
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 25px rgba(168,85,247,0.6);
-}
-
-.section {
-  padding: 60px 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background: rgba(255,255,255,0.05);
-  padding: 25px;
-  border-radius: 15px;
-  transform: translateY(50px);
-  opacity: 0;
-  transition: 0.6s;
-}
-
-.card.show {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.card:hover {
-  transform: translateY(-8px) scale(1.02);
-  background: rgba(168,85,247,0.2);
-}
-
-.footer {
-  text-align: center;
-  padding: 25px;
-  color: #aaa;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.login-box {
-  display: inline-block;
-  margin-top: 30px;
-  padding: 15px 30px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.login-box:hover {
-  background: rgba(255,255,255,0.2);
-  transform: scale(1.05);
-}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;overflow-x:hidden;}
+.navbar{display:flex;justify-content:space-between;padding:15px 30px;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);position:sticky;top:0;}
+.navbar h2{color:#c084fc;}
+.navbar a{color:white;margin-left:20px;text-decoration:none;}
+.hero{text-align:center;padding:100px 20px;}
+.hero h1{font-size:50px;color:#d8b4fe;animation:fadeUp 1s ease;}
+.hero p{color:#ccc;animation:fadeUp 1.5s ease;}
+.go-login{display:inline-block;margin-top:30px;padding:20px 50px;font-size:22px;font-weight:bold;color:white;background:linear-gradient(135deg,#a855f7,#c084fc);border-radius:15px;cursor:pointer;transition:.3s;box-shadow:0 10px 25px rgba(168,85,247,0.6);animation:bounce 1s infinite alternate;}
+.go-login:hover{transform:scale(1.1);box-shadow:0 15px 30px rgba(168,85,247,0.8);}
+.signup-text{margin-top:15px;font-size:16px;color:#ddd;cursor:pointer;}
+.signup-text span{color:#a855f7;font-weight:bold;}
+.section{padding:60px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.card{background:rgba(255,255,255,0.05);padding:25px;border-radius:15px;transform:translateY(50px);opacity:0;transition:.6s;}
+.card.show{transform:translateY(0);opacity:1;}
+.card:hover{transform:translateY(-8px) scale(1.02);background:rgba(168,85,247,0.2);}
+.footer{text-align:center;padding:25px;color:#aaa;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bounce{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
 </style>
-
 </head>
 <body>
 
 <div class="navbar">
   <h2>Book's Club</h2>
   <div>
-    <a href="index.html">Home</a>
+    <a href="#">Home</a>
     <a href="login.html">Login</a>
   </div>
 </div>
 
 <div class="hero">
-  <h1>Lose Yourself In Stories</h1>
-  <p>Every book opens a new universe. Start your journey now.</p>
+  <h1>Step Into New Worlds</h1>
+  <p>Discover books, connect with readers, and start your journey today.</p>
 
-  <div class="login-box" onclick="location.href='login.html'">Go to Login</div>
+  <div class="go-login" onclick="location.href='login.html'">Go to Login</div>
+  <div class="signup-text" onclick="location.href='register.html'">
+    Don't you have an account? <span>Sign up</span>
+  </div>
 </div>
 
 <div class="section">
-  <div class="card">
-    <h3>📖 Endless Worlds</h3>
-    <p>Step into stories that redefine imagination and reality.</p>
-  </div>
-
-  <div class="card">
-    <h3>🧠 Build Your Mind</h3>
-    <p>Knowledge grows with every page you read.</p>
-  </div>
-
-  <div class="card">
-    <h3>🔥 Trending Books</h3>
-    <p>Discover what everyone is talking about right now.</p>
-  </div>
-
-  <div class="card">
-    <h3>💬 Real Community</h3>
-    <p>Connect with readers who share your passion.</p>
-  </div>
-
-  <div class="card">
-    <h3>🌌 Escape Reality</h3>
-    <p>Dive deep into worlds beyond imagination.</p>
-  </div>
-
-  <div class="card">
-    <h3>⚡ Fast Experience</h3>
-    <p>Clean, smooth and built for your comfort.</p>
-  </div>
+  <div class="card"><h3>📖 Endless Stories</h3><p>Explore novels that take you beyond reality.</p></div>
+  <div class="card"><h3>🧠 Self Development</h3><p>Grow your mind with knowledge and ideas.</p></div>
+  <div class="card"><h3>🔥 Trending Books</h3><p>See what readers are loving right now.</p></div>
+  <div class="card"><h3>💬 Community</h3><p>Share opinions and discuss books with friends.</p></div>
 </div>
 
-<div class="footer">
-  powered by •ＵᏒ-１３•𓂀
-</div>
+<div class="footer">powered by •ＵᏒ-１３•𓂀</div>
 
 <script>
-const cards = document.querySelectorAll(".card");
-
-window.addEventListener("scroll", () => {
-  cards.forEach(card => {
-    const top = card.getBoundingClientRect().top;
-    if(top < window.innerHeight - 100){
-      card.classList.add("show");
-    }
-  });
-});
+const cards=document.querySelectorAll(".card");
+window.addEventListener("scroll",()=>{cards.forEach(card=>{const top=card.getBoundingClientRect().top;if(top<window.innerHeight-100){card.classList.add("show");}});});
 </script>
 
 </body>
