@@ -9,7 +9,7 @@
 <style>
 * { box-sizing: border-box; }
 body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
-.login-card { width: 90%; max-width: 400px; background: rgba(30, 20, 50, 0.6); padding: 40px 30px; border-radius: 24px; backdrop-filter: blur(12px); box-shadow: 0 0 50px rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); text-align: center; position: relative; z-index: 1; }
+.login-card { width: 90%; max-width: 400px; background: rgba(30, 20, 50, 0.6); padding: 40px 30px; border-radius: 24px; backdrop-filter: blur(12px); box-shadow: 0 0 50px rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); text-align: center; }
 h1 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
 h1 span { color: #a78bfa; }
 p { color: #aaa; margin-bottom: 30px; font-size: 14px; }
@@ -79,7 +79,7 @@ const googleProvider = new GoogleAuthProvider();
 
 document.getElementById('googleBtn').onclick = () => {
     signInWithPopup(auth, googleProvider)
-        .then(() => { window.location.href = 'index.html'; })
+        .then(() => { window.location.href = 'home.html'; })
         .catch(err => Swal.fire({ icon: 'error', title: 'Login Failed', text: err.message }));
 };
 
@@ -96,7 +96,7 @@ document.getElementById('loginBtn').onclick = () => {
     signInWithEmailAndPassword(auth, email, password)
         .then((res) => {
             if(res.user.emailVerified || res.user.providerData[0]?.providerId === 'google.com') {
-                window.location.href = 'index.html';
+                window.location.href = 'home.html';
             } else {
                 Swal.fire({ icon: 'warning', title: 'Verify Email', text: 'Please check your inbox to verify your account.' });
             }
