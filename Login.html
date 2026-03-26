@@ -8,21 +8,23 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 * { box-sizing: border-box; }
-body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-.login-card { width: 90%; max-width: 400px; background: rgba(30, 20, 50, 0.6); padding: 40px 30px; border-radius: 24px; backdrop-filter: blur(12px); box-shadow: 0 0 50px rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); text-align: center; }
-h1 { font-size: 28px; margin-bottom: 10px; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+.login-card { width: 90%; max-width: 400px; background: rgba(30, 20, 50, 0.6); padding: 40px 30px; border-radius: 24px; backdrop-filter: blur(12px); box-shadow: 0 0 50px rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); text-align: center; position: relative; z-index: 1; }
+h1 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
 h1 span { color: #a78bfa; }
 p { color: #aaa; margin-bottom: 30px; font-size: 14px; }
 input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: none; background: #1a1325; color: #fff; transition: 0.3s; border: 1px solid transparent; }
 input:focus { outline: none; border-color: #a78bfa; background: #221933; box-shadow: 0 0 15px rgba(167,139,250,0.2); }
 .main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; font-size: 16px; }
 .main-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(167,139,250,0.4); }
-.divider { margin: 25px 0; display: flex; align-items: center; color: #555; font-size: 12px; }
+.divider { margin: 25px 0; display: flex; align-items: center; color: #555; font-size: 12px; font-weight: bold; }
 .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #333; margin: 0 10px; }
-.social-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #1a1325; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 14px; gap: 10px; }
-.social-btn:hover { background: #251c35; border-color: rgba(167,139,250,0.5); }
-.footer-text { margin-top: 25px; font-size: 12px; color: #666; }
+.social-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #1a1325; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 14px; gap: 10px; font-weight: 500; }
+.social-btn:hover { background: #251c35; border-color: rgba(167,139,250,0.5); transform: translateY(-1px); }
+.footer-text { margin-top: 25px; font-size: 12px; color: #666; letter-spacing: 1px; }
 .swal2-popup { background: #1a1325 !important; color: #fff !important; border-radius: 18px !important; border: 1px solid rgba(167,139,250,0.2) !important; }
+.swal2-title, .swal2-html-container { color: #fff !important; }
+.swal2-confirm { background: linear-gradient(135deg, #a78bfa, #7c3aed) !important; border-radius: 10px !important; }
 </style>
 </head>
 <body>
@@ -30,18 +32,35 @@ input:focus { outline: none; border-color: #a78bfa; background: #221933; box-sha
 <div class="login-card">
   <h1>Welcome to <span>Book's</span></h1>
   <p>Sign in to continue to your library</p>
-  <button class="social-btn" id="googleBtn"><i class="fab fa-google" style="color: #ea4335;"></i> Continue with Google</button>
-  <button class="social-btn" id="appleBtn"><i class="fab fa-apple"></i> Continue with Apple</button>
+  
+  <button class="social-btn" id="googleBtn">
+    <i class="fab fa-google" style="color: #ea4335;"></i> Continue with Google
+  </button>
+  
+  <button class="social-btn" id="appleBtn">
+    <i class="fab fa-apple"></i> Continue with Apple
+  </button>
+
   <div class="divider">OR USE EMAIL</div>
+
   <input type="email" id="email" placeholder="Email Address">
   <input type="password" id="password" placeholder="Password">
+  
   <button class="main-btn" id="loginBtn">Sign In / Register</button>
+
   <div class="footer-text">powered by •ＵᏒ-１３•𓂀</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { 
+    getAuth, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    sendEmailVerification 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
@@ -59,30 +78,44 @@ const googleProvider = new GoogleAuthProvider();
 document.getElementById('googleBtn').onclick = () => {
     signInWithPopup(auth, googleProvider)
         .then(() => { window.location.href = 'index.html'; })
-        .catch(err => Swal.fire({ icon: 'error', text: err.message }));
+        .catch(err => Swal.fire({ icon: 'error', title: 'Login Failed', text: err.message }));
 };
 
 document.getElementById('loginBtn').onclick = () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    if(!email || !password) return;
-    Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading() });
+    if(!email || !password) {
+        Swal.fire({ icon: 'warning', text: 'Please fill in all fields' });
+        return;
+    }
+
+    Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+
     signInWithEmailAndPassword(auth, email, password)
         .then((res) => {
-            if(res.user.emailVerified) { window.location.href = 'index.html'; }
-            else { Swal.fire({ icon: 'warning', text: 'Please verify your email first!' }); }
+            if(res.user.emailVerified) {
+                window.location.href = 'index.html';
+            } else {
+                Swal.fire({ icon: 'warning', title: 'Verify Email', text: 'Please check your inbox to verify your account.' });
+            }
         })
         .catch((error) => {
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((res) => {
                         sendEmailVerification(res.user);
-                        Swal.fire({ icon: 'success', title: 'Account Created', text: 'Verification email sent! ✅' });
+                        Swal.fire({ icon: 'success', title: 'Verify your email', text: 'Account created! A verification link has been sent to your email. ✅' });
                     })
-            } else { Swal.fire({ icon: 'error', text: error.message }); }
+                    .catch(err => Swal.fire({ icon: 'error', text: err.message }));
+            } else {
+                Swal.fire({ icon: 'error', text: error.message });
+            }
         });
+};
+
+document.getElementById('appleBtn').onclick = () => {
+    Swal.fire({ icon: 'info', text: 'Apple Sign-In is coming soon!' });
 };
 </script>
 </body>
 </html>
-
