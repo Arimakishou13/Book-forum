@@ -10,8 +10,8 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
 .navbar{display:flex;justify-content:center;align-items:center;padding:15px 30px;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);position:sticky;top:0;}
 .navbar h2{color:#c084fc;margin-right:50px;}
 .nav-links{display:flex;align-items:center;position:absolute;right:30px;}
-.nav-links a{color:white;margin-left:20px;text-decoration:none;font-weight:bold;}
-.nav-links img{width:40px;height:40px;border-radius:50%;border:2px solid #c084fc;cursor:pointer;}
+.nav-links a{color:white;margin-left:20px;text-decoration:none;font-weight:bold;display:flex;align-items:center;}
+.nav-links img{width:40px;height:40px;border-radius:50%;border:2px solid #c084fc;cursor:pointer;margin-left:8px;}
 .hero{text-align:center;padding:100px 20px;}
 .hero h1{font-size:50px;color:#d8b4fe;animation:fadeUp 1s ease;}
 .hero p{color:#ccc;animation:fadeUp 1.5s ease;}
@@ -33,7 +33,10 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
   <div class="nav-links">
     <a href="login.html">Login</a>
     <a href="register.html">Register</a>
-    <a href="profile.html"><img id="profileIcon" src="https://via.placeholder.com/40" alt="Profile"></a>
+    <a href="profile.html" id="profileLink">
+      <span id="profileNameNav">Guest</span>
+      <img id="profileIcon" src="https://via.placeholder.com/40" alt="Profile">
+    </a>
   </div>
 </div>
 
@@ -52,15 +55,27 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
 
 <div class="footer">powered by •ＵᏒ-１３•𓂀</div>
 
-<script>
-const cards=document.querySelectorAll(".card");
-window.addEventListener("scroll",()=>{
-  cards.forEach(card=>{
-    const top=card.getBoundingClientRect().top;
-    if(top<window.innerHeight-100){card.classList.add("show");}
-  });
-});
-</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-</body>
-</html>
+const firebaseConfig = {
+  apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
+  authDomain: "book-club-13.firebaseapp.com",
+  projectId: "book-club-13",
+  storageBucket: "book-club-13.appspot.com",
+  messagingSenderId: "PUT_SENDER_ID_HERE",
+  appId: "PUT_APP_ID_HERE"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const profileIcon = document.getElementById("profileIcon");
+const profileNameNav = document.getElementById("profileNameNav");
+const profileLink = document.getElementById("profileLink");
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    profileIcon.src = user.photoURL || "https://via.placeholder.com/40";
+    profileNameNav.textContent = user.display
