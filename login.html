@@ -28,9 +28,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "PUT YOUR API KEY",
-  authDomain: "PUT YOUR DOMAIN",
-  projectId: "PUT YOUR ID",
+  apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
+  authDomain: "book-club-13.firebaseapp.com",
+  projectId: "book-club-13",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -44,8 +44,8 @@ btn.addEventListener("click",()=>{
   const email=emailInput.value;
   const password=passInput.value;
   signInWithEmailAndPassword(auth,email,password)
-  .then(()=>{window.location.href="home.html";})
-  .catch(()=>{createUserWithEmailAndPassword(auth,email,password).then(()=>window.location.href="home.html").catch(err=>alert(err.message));});
+  .then(()=>{window.location.href="index.html";})
+  .catch(()=>{createUserWithEmailAndPassword(auth,email,password).then(()=>window.location.href="index.html").catch(err=>alert(err.message));});
 });
 </script>
 
