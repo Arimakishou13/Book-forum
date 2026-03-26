@@ -7,16 +7,16 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;overflow-x:hidden;}
-.navbar{display:flex;justify-content:space-between;padding:15px 30px;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);position:sticky;top:0;}
-.navbar h2{color:#c084fc;}
-.navbar a{color:white;margin-left:20px;text-decoration:none;}
+.navbar{display:flex;justify-content:center;align-items:center;padding:15px 30px;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);position:sticky;top:0;}
+.navbar h2{color:#c084fc;margin-right:50px;}
+.nav-links{display:flex;align-items:center;position:absolute;right:30px;}
+.nav-links a{color:white;margin-left:20px;text-decoration:none;font-weight:bold;}
+.nav-links img{width:40px;height:40px;border-radius:50%;border:2px solid #c084fc;cursor:pointer;}
 .hero{text-align:center;padding:100px 20px;}
 .hero h1{font-size:50px;color:#d8b4fe;animation:fadeUp 1s ease;}
 .hero p{color:#ccc;animation:fadeUp 1.5s ease;}
 .go-login{display:inline-block;margin-top:30px;padding:20px 50px;font-size:22px;font-weight:bold;color:white;background:linear-gradient(135deg,#a855f7,#c084fc);border-radius:15px;cursor:pointer;transition:.3s;box-shadow:0 10px 25px rgba(168,85,247,0.6);animation:bounce 1s infinite alternate;}
 .go-login:hover{transform:scale(1.1);box-shadow:0 15px 30px rgba(168,85,247,0.8);}
-.signup-text{margin-top:15px;font-size:16px;color:#ddd;cursor:pointer;}
-.signup-text span{color:#a855f7;font-weight:bold;}
 .section{padding:60px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
 .card{background:rgba(255,255,255,0.05);padding:25px;border-radius:15px;transform:translateY(50px);opacity:0;transition:.6s;}
 .card.show{transform:translateY(0);opacity:1;}
@@ -29,21 +29,18 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
 <body>
 
 <div class="navbar">
-  <h2>Book's Club</h2>
-  <div>
-    <a href="#">Home</a>
+  <h2>Home</h2>
+  <div class="nav-links">
     <a href="login.html">Login</a>
+    <a href="register.html">Register</a>
+    <a href="profile.html"><img id="profileIcon" src="https://via.placeholder.com/40" alt="Profile"></a>
   </div>
 </div>
 
 <div class="hero">
   <h1>Step Into New Worlds</h1>
   <p>Discover books, connect with readers, and start your journey today.</p>
-
   <div class="go-login" onclick="location.href='login.html'">Go to Login</div>
-  <div class="signup-text" onclick="location.href='register.html'">
-    Don't you have an account? <span>Sign up</span>
-  </div>
 </div>
 
 <div class="section">
@@ -57,7 +54,12 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
 
 <script>
 const cards=document.querySelectorAll(".card");
-window.addEventListener("scroll",()=>{cards.forEach(card=>{const top=card.getBoundingClientRect().top;if(top<window.innerHeight-100){card.classList.add("show");}});});
+window.addEventListener("scroll",()=>{
+  cards.forEach(card=>{
+    const top=card.getBoundingClientRect().top;
+    if(top<window.innerHeight-100){card.classList.add("show");}
+  });
+});
 </script>
 
 </body>
