@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Book's Club</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.login-card { width: 90%; max-width: 400px; background: rgba(30, 20, 50, 0.6); padding: 40px 30px; border-radius: 24px; backdrop-filter: blur(12px); box-shadow: 0 0 50px rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); text-align: center; }
+h1 { font-size: 28px; margin-bottom: 10px; }
+h1 span { color: #a78bfa; }
+p { color: #aaa; margin-bottom: 30px; font-size: 14px; }
+input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: none; background: #1a1325; color: #fff; transition: 0.3s; border: 1px solid transparent; }
+input:focus { outline: none; border-color: #a78bfa; background: #221933; box-shadow: 0 0 15px rgba(167,139,250,0.2); }
+.main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; font-size: 16px; }
+.main-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(167,139,250,0.4); }
+.divider { margin: 25px 0; display: flex; align-items: center; color: #555; font-size: 12px; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #333; margin: 0 10px; }
+.social-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #1a1325; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 14px; gap: 10px; }
+.social-btn:hover { background: #251c35; border-color: rgba(167,139,250,0.5); }
+.footer-text { margin-top: 25px; font-size: 12px; color: #666; }
+.swal2-popup { background: #1a1325 !important; color: #fff !important; border-radius: 18px !important; border: 1px solid rgba(167,139,250,0.2) !important; }
+</style>
+</head>
+<body>
+
+<div class="login-card">
+  <h1>Welcome to <span>Book's</span></h1>
+  <p>Sign in to continue to your library</p>
+  <button class="social-btn" id="googleBtn"><i class="fab fa-google" style="color: #ea4335;"></i> Continue with Google</button>
+  <button class="social-btn" id="appleBtn"><i class="fab fa-apple"></i> Continue with Apple</button>
+  <div class="divider">OR USE EMAIL</div>
+  <input type="email" id="email" placeholder="Email Address">
+  <input type="password" id="password" placeholder="Password">
+  <button class="main-btn" id="loginBtn">Sign In / Register</button>
+  <div class="footer-text">powered by •ＵᏒ-１３•𓂀</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
+  authDomain: "book-club-13.firebaseapp.com",
+  projectId: "book-club-13",
+  storageBucket: "book-club-13.firebasestorage.app",
+  messagingSenderId: "321914571323",
+  appId: "1:321914571323:web:edfc6bc0ac802e6dd06a1e"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+document.getElementById('googleBtn').onclick = () => {
+    signInWithPopup(auth, googleProvider)
+        .then(() => { window.location.href = 'index.html'; })
+        .catch(err => Swal.fire({ icon: 'error', text: err.message }));
+};
+
+document.getElementById('loginBtn').onclick = () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    if(!email || !password) return;
+    Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading() });
+    signInWithEmailAndPassword(auth, email, password)
+        .then((res) => {
+            if(res.user.emailVerified) { window.location.href = 'index.html'; }
+            else { Swal.fire({ icon: 'warning', text: 'Please verify your email first!' }); }
+        })
+        .catch((error) => {
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((res) => {
+                        sendEmailVerification(res.user);
+                        Swal.fire({ icon: 'success', title: 'Account Created', text: 'Verification email sent! ✅' });
+                    })
+            } else { Swal.fire({ icon: 'error', text: error.message }); }
+        });
+};
+</script>
+</body>
+</html>
+
