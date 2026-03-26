@@ -37,50 +37,6 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
 .nav-links a:hover{background:rgba(168,85,247,0.2);}
 .nav-links img{width:35px;height:35px;border-radius:50%;border:2px solid #c084fc;object-fit:cover;}
 
-.theme-btn{
-  font-size: 18px;
-  padding: 6px 12px;
-  border-radius: 12px;
-  border:none;
-  cursor:pointer;
-  background: rgba(255,255,255,0.05);
-  color:white;
-  transition: 0.4s ease;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.theme-btn:hover{
-  transform: scale(1.2) rotate(20deg);
-  background: rgba(168,85,247,0.2);
-}
-
-body.light-mode {
-  background: linear-gradient(135deg,#f5f5f5,#e0e0e0);
-  color: #1a1a1a;
-}
-
-body.light-mode .navbar{
-  background: rgba(255,255,255,0.6);
-  border-bottom: 1px solid rgba(168,85,247,0.3);
-}
-
-body.light-mode .nav-links a,
-body.light-mode .theme-btn{
-  color:#1a1a1a;
-  background: rgba(0,0,0,0.05);
-}
-
-body.light-mode .card{
-  background: rgba(0,0,0,0.05);
-}
-
-body.light-mode .login-card{
-  background: rgba(230,230,250,0.95);
-  color:#1a1a1a;
-}
-
 .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px;}
 .hero h1{font-size:48px;color:#d8b4fe;margin-bottom:15px;animation:fadeUp 1s ease;}
 .hero p{color:#ccc;margin-bottom:25px;animation:fadeUp 1.2s ease;}
@@ -108,12 +64,12 @@ body.light-mode .login-card{
 <div class="navbar">
   <h2>Home</h2>
   <div class="nav-links">
+    <a href="login.html">Login</a>
     <a href="register.html">Register</a>
     <a href="profile.html" id="profileLink">
       <span id="profileNameNav">Guest</span>
       <img id="profileIcon" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile">
     </a>
-    <button id="themeToggle" class="theme-btn">🌙</button>
   </div>
 </div>
 
@@ -189,12 +145,6 @@ loginBtn.addEventListener("click",()=>{
         .then(()=>alert("Account created ✅"))
         .catch(err=>alert(err.message));
     });
-});
-
-const themeToggle = document.getElementById("themeToggle");
-themeToggle.addEventListener("click", ()=>{
-  document.body.classList.toggle("light-mode");
-  themeToggle.textContent = document.body.classList.contains("light-mode") ? "🌞" : "🌙";
 });
 </script>
 
