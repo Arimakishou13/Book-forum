@@ -77,43 +77,27 @@ button:hover{
   <button id="saveBtn">Save</button>
 </div>
 <script>
-function hasAccount(){
-  return localStorage.getItem("account") === "true";
-}
-if(!hasAccount()){
-  window.location.href = "index.html";
-}
-function saveProfile(){
-  let name = document.getElementById("name").value;
-  let username = document.getElementById("username").value;
-  let img = document.getElementById("preview").src;
-  localStorage.setItem("name",name);
-  localStorage.setItem("username",username);
-  localStorage.setItem("profilePic",img);
+function hasAccount(){ return localStorage.getItem("account")==="true"; }
+if(!hasAccount()){ window.location.href="index.html"; }
+document.getElementById("saveBtn").addEventListener("click",function(){
+  localStorage.setItem("name",document.getElementById("name").value);
+  localStorage.setItem("username",document.getElementById("username").value);
+  localStorage.setItem("profilePic",document.getElementById("preview").src);
   alert("Saved successfully ✅");
-}
+});
 document.getElementById("imageInput").addEventListener("change",function(e){
-  const file = e.target.files[0];
+  const file=e.target.files[0];
   if(file){
-    const reader = new FileReader();
-    reader.onload = function(){
-      document.getElementById("preview").src = reader.result;
-    }
+    const reader=new FileReader();
+    reader.onload=function(){ document.getElementById("preview").src=reader.result; };
     reader.readAsDataURL(file);
   }
 });
-window.onload = function(){
-  if(localStorage.getItem("profilePic")){
-    document.getElementById("preview").src = localStorage.getItem("profilePic");
-  }
-  if(localStorage.getItem("name")){
-    document.getElementById("name").value = localStorage.getItem("name");
-  }
-  if(localStorage.getItem("username")){
-    document.getElementById("username").value = localStorage.getItem("username");
-  }
+window.onload=function(){
+  if(localStorage.getItem("profilePic")) document.getElementById("preview").src=localStorage.getItem("profilePic");
+  if(localStorage.getItem("name")) document.getElementById("name").value=localStorage.getItem("name");
+  if(localStorage.getItem("username")) document.getElementById("username").value=localStorage.getItem("username");
 };
-document.getElementById("saveBtn").addEventListener("click", saveProfile);
 </script>
 </body>
 </html>
