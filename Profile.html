@@ -119,9 +119,9 @@
 
 <div class="profile-card">
   <img id="profileImage" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
-  <h2 id="profileName">Loading...</h2>
-  <p id="profileUsername">@loading</p>
-  <label class="change-btn" for="fileUpload">Change Photo</label>
+  <h2 id="profileName">Guest User</h2>
+  <p id="profileUsername">@guest</p>
+  <label class="change-btn" for="fileUpload" id="uploadLabel">Change Photo</label>
   <input type="file" id="fileUpload" accept="image/*">
 </div>
 
@@ -149,14 +149,20 @@ const profileImage = document.getElementById("profileImage");
 const profileName = document.getElementById("profileName");
 const profileUsername = document.getElementById("profileUsername");
 const fileUpload = document.getElementById("fileUpload");
+const uploadLabel = document.getElementById("uploadLabel");
 
 onAuthStateChanged(auth, user => {
   if(user){
     profileImage.src = user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     profileName.textContent = user.displayName || user.email.split('@')[0];
     profileUsername.textContent = '@' + (user.displayName?.toLowerCase().replace(/\s/g,'') || user.email.split('@')[0]);
+    uploadLabel.style.display = "block";
   } else {
-    window.location.href = "index.html";
+   
+    profileImage.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    profileName.textContent = "Guest User";
+    profileUsername.textContent = "@guest";
+    uploadLabel.style.display = "none"; 
   }
 });
 
