@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile - Book's Club</title>
+<style>
+body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;display:flex;justify-content:center;align-items:center;height:100vh;}
+.container{background:rgba(30,31,63,0.95);padding:40px;border-radius:15px;width:350px;text-align:center;}
+.container img{width:120px;height:120px;border-radius:50%;border:3px solid #c084fc;}
+.container h2{margin:15px 0;color:#d8b4fe;}
+.container p{color:#aaa;margin-bottom:15px;}
+input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;}
+button{width:100%;padding:10px;margin-top:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;}
+button:hover{background:#c084fc;}
+a{display:block;margin-top:15px;color:#3b82f6;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <img id="profileImg" src="https://via.placeholder.com/120" alt="Profile">
+  <h2 id="profileName">Guest</h2>
+  <p id="profileUsername">guest</p>
+  <input type="text" id="newUsername" placeholder="Change username">
+  <input type="file" id="newImg">
+  <button id="saveBtn">Save</button>
+  <button id="logoutBtn">Logout</button>
+  <a href="index.html">Back to Home</a>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
+  authDomain: "book-club-13.firebaseapp.com",
+  projectId: "book-club-13",
+  storageBucket: "book-club-13.appspot.com",
+  messagingSenderId: "PUT_SENDER_ID_HERE",
+  appId: "PUT_APP_ID_HERE"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const profileImg = document.getElementById("profileImg");
+const profileName = document.getElementById("profileName");
+const profileUsername = document.getElementById("profileUsername");
+const newUsername = document.getElementById("newUsername");
+const newImg = document.getElementById("newImg");
+const saveBtn = document.getElementById("saveBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    profileImg.src = user.photoURL || "https://via.placeholder.com/120";
+    profileName.textContent = user.displayName || "No Name";
+    profileUsername.textContent = user.email.split('@')[0];
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+saveBtn.addEventListener("click",()=>{
+  const file = newImg.files[0];
+  const username = newUsername.value;
+  if(auth.currentUser){
+    updateProfile(auth.currentUser,{
+      displayName: username || auth.currentUser.displayName,
+      photoURL: file ? URL.createObjectURL(file) : auth.currentUser.photoURL
+    }).then(()=>location.reload());
+  }
+});
+
+logoutBtn.addEventListener("click",()=>{
+  signOut(auth).then(()=>window.location.href="index.html");
+});
+</script>
+
+</body>
+</html>
