@@ -3,106 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Book's Club</title>
+<title>Book's Club</title>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-* { box-sizing: border-box; margin:0; padding:0; }
-body { 
-  font-family: 'Segoe UI', sans-serif; 
-  background: #0b0b0f; 
-  color: #f5f5f5; 
-  display: flex; 
-  flex-direction: column; 
-  min-height: 100vh; 
-  overflow-y: auto; 
-  scroll-behavior: smooth;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; overflow-x: hidden; }
+header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(20,10,40,0.8); backdrop-filter: blur(8px); padding: 20px; text-align: center; font-size: 28px; font-weight: bold; color: #a78bfa; z-index: 1000; }
+section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 50px; }
+h1 { font-size: 36px; margin-bottom: 20px; color: #fff; opacity: 0; transform: translateY(30px); animation: slideIn 1s forwards; }
+p { font-size: 18px; color: #ccc; max-width: 600px; text-align: center; margin-bottom: 40px; opacity: 0; transform: translateY(30px); animation: slideIn 1s 0.3s forwards; }
+button { padding: 14px 28px; border-radius: 12px; border: none; cursor: pointer; font-size: 16px; font-weight: bold; margin: 10px; transition: 0.3s; }
+button.primary { background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; }
+button.secondary { background: transparent; border: 1px solid #a78bfa; color: #a78bfa; }
+button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,250,0.4); }
+
+@keyframes slideIn {
+  to { opacity: 1; transform: translateY(0); }
 }
 
-header { 
-  width: 100%; 
-  background: linear-gradient(135deg,#7c3aed,#a78bfa); 
-  padding: 20px; 
-  text-align: center; 
-  font-size: 24px; 
-  font-weight: bold; 
-  color: #fff; 
-  position: sticky; 
-  top: 0; 
-  z-index: 10;
-  animation: slideDown 1s ease forwards;
-  opacity: 0;
-}
+.login-section { background: rgba(30,20,50,0.7); backdrop-filter: blur(12px); border-radius: 24px; padding: 40px 30px; max-width: 400px; width: 90%; text-align: center; opacity: 0; transform: translateY(50px); transition: all 1s; }
+.login-section.visible { opacity: 1; transform: translateY(0); }
 
-@keyframes slideDown {
-  0% { transform: translateY(-30px); opacity:0; }
-  100% { transform: translateY(0); opacity:1; }
-}
+input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: 1px solid transparent; background: #1a1325; color: #fff; transition: 0.3s; }
+input:focus { outline: none; border-color: #a78bfa; box-shadow: 0 0 15px rgba(167,139,250,0.2); }
 
-.login-card { 
-  width: 90%; 
-  max-width: 400px; 
-  background: rgba(30, 20, 50, 0.6); 
-  padding: 40px 30px; 
-  border-radius: 24px; 
-  backdrop-filter: blur(12px); 
-  box-shadow: 0 0 50px rgba(167,139,250,0.1); 
-  border: 1px solid rgba(167,139,250,0.2); 
-  text-align: center; 
-  margin: 40px auto; 
-  animation: fadeUp 1s ease forwards;
-  opacity: 0;
-}
+.footer-text { margin-top: 20px; font-size: 12px; color: #666; }
 
-@keyframes fadeUp {
-  0% { transform: translateY(20px); opacity:0; }
-  100% { transform: translateY(0); opacity:1; }
-}
-
-h1 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
-h1 span { color: #a78bfa; }
-p { color: #aaa; margin-bottom: 30px; font-size: 14px; }
-input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: none; background: #1a1325; color: #fff; transition: 0.3s; border: 1px solid transparent; }
-input:focus { outline: none; border-color: #a78bfa; background: #221933; box-shadow: 0 0 15px rgba(167,139,250,0.2); }
-.main-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; font-size: 16px; }
-.main-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(167,139,250,0.4); }
-.main-btn.secondary { background: transparent; border: 1px solid #a78bfa; color: #a78bfa; margin-top: 10px; }
-.divider { margin: 25px 0; display: flex; align-items: center; color: #555; font-size: 12px; font-weight: bold; }
-.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #333; margin: 0 10px; }
-.social-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #1a1325; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 14px; gap: 10px; font-weight: 500; }
-.social-btn:hover { background: #251c35; border-color: rgba(167,139,250,0.5); transform: translateY(-1px); }
-.footer-text { margin-top: 25px; font-size: 12px; color: #666; letter-spacing: 1px; }
 .swal2-popup { background: #1a1325 !important; color: #fff !important; border-radius: 18px !important; border: 1px solid rgba(167,139,250,0.2) !important; }
-.swal2-title, .swal2-html-container { color: #fff !important; }
-.swal2-confirm { background: linear-gradient(135deg, #a78bfa, #7c3aed) !important; border-radius: 10px !important; }
 </style>
 </head>
 <body>
 
 <header>Book's Club</header>
 
-<div class="login-card">
-  <h1>Welcome to <span>Book's</span></h1>
-  <p>Sign in or create a new account</p>
-  
-  <button class="social-btn" id="googleBtn">
-    <i class="fab fa-google" style="color: #ea4335;"></i> Continue with Google
-  </button>
-  
-  <button class="social-btn" id="appleBtn">
-    <i class="fab fa-apple"></i> Continue with Apple
-  </button>
-  
-  <div class="divider">OR USE EMAIL</div>
+<section>
+  <h1>Welcome to Book's Club</h1>
+  <p>Discover, read, and discuss your favorite books with our community. Sign in or register to start your journey!</p>
+  <button class="primary" id="scrollLogin">Sign In / Register</button>
+</section>
 
+<section id="loginSection" class="login-section">
+  <h1>Login / Register</h1>
   <input type="email" id="email" placeholder="Email Address">
   <input type="password" id="password" placeholder="Password">
-  
-  <button class="main-btn" id="loginBtn">Sign In / Register</button>
-  <button class="main-btn secondary" id="registerBtn">Create New Account</button>
-
+  <button class="primary" id="loginBtn">Sign In / Register</button>
+  <button class="secondary" id="registerBtn">Create New Account</button>
   <div class="footer-text">powered by •ＵᏒ-１３•𓂀</div>
-</div>
+</section>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -128,36 +76,36 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-document.getElementById('googleBtn').onclick = () => {
-    signInWithPopup(auth, googleProvider)
-        .then(() => { window.location.href = 'home.html'; })
-        .catch(err => Swal.fire({ icon: 'error', title: 'Login Failed', text: err.message }));
+// Scroll to login section
+document.getElementById('scrollLogin').onclick = () => {
+    const login = document.getElementById('loginSection');
+    login.classList.add('visible');
+    login.scrollIntoView({ behavior: 'smooth' });
 };
 
+// Login/Register functionality
 document.getElementById('loginBtn').onclick = () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
-    if(!email || !password) {
-        Swal.fire({ icon: 'warning', text: 'Please fill in all fields' });
-        return;
-    }
+    if(!email || !password) return Swal.fire({ icon: 'warning', text: 'Please fill in all fields' });
 
     Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
 
     signInWithEmailAndPassword(auth, email, password)
-        .then((res) => {
+        .then(res => {
             if(res.user.emailVerified || res.user.providerData[0]?.providerId === 'google.com') {
-                window.location.href = 'home.html';
+                Swal.close();
+                Swal.fire({ icon: 'success', text: 'Logged in successfully!' });
             } else {
-                Swal.fire({ icon: 'warning', title: 'Verify Email', text: 'Please check your inbox to verify your account.' });
+                Swal.fire({ icon: 'warning', text: 'Verify your email first!' });
             }
         })
-        .catch((error) => {
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        .catch(error => {
+            if(error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
                 createUserWithEmailAndPassword(auth, email, password)
-                    .then((res) => {
+                    .then(res => {
                         sendEmailVerification(res.user);
-                        Swal.fire({ icon: 'success', title: 'Verify your email', text: 'Account created! A verification link has been sent to your email. ✅' });
+                        Swal.fire({ icon: 'success', text: 'Account created! Verification sent ✅' });
                     })
                     .catch(err => Swal.fire({ icon: 'error', text: err.message }));
             } else {
@@ -166,21 +114,18 @@ document.getElementById('loginBtn').onclick = () => {
         });
 };
 
+// Register button
 document.getElementById('registerBtn').onclick = () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
     if(!email || !password) return Swal.fire({ icon: 'warning', text: 'Please fill in all fields!' });
 
     createUserWithEmailAndPassword(auth, email, password)
-        .then((res) => {
+        .then(res => {
             sendEmailVerification(res.user);
-            Swal.fire({ icon: 'success', title: 'Check your email', text: 'Verification link sent! ✅' });
+            Swal.fire({ icon: 'success', text: 'Verification link sent! ✅' });
         })
         .catch(err => Swal.fire({ icon: 'error', text: err.message }));
-};
-
-document.getElementById('appleBtn').onclick = () => {
-    Swal.fire({ icon: 'info', text: 'Apple Sign-In is coming soon!' });
 };
 </script>
 </body>
