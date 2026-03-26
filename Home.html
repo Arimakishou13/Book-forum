@@ -7,38 +7,31 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * { box-sizing: border-box; }
-body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; overflow-x: hidden; }
-.hero { text-align: center; margin: 120px 20px 60px; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; color: #f5f5f5; }
+.hero { text-align: center; margin: 100px 20px 40px; }
 .hero h1 { font-size: 38px; }
 .hero span { color: #a78bfa; }
-.hero p { color: #aaa; }
-.section { width: 90%; max-width: 500px; margin: 40px auto; opacity: 1; }
-.card { width: 100%; background: rgba(30, 20, 50, 0.6); padding: 25px; border-radius: 18px; backdrop-filter: blur(12px); box-shadow: 0 0 40px rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.2); text-align: center; }
+.card { width: 90%; max-width: 500px; background: rgba(30, 20, 50, 0.6); padding: 30px; border-radius: 18px; backdrop-filter: blur(12px); box-shadow: 0 0 40px rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.2); margin: 20px auto; text-align: center; }
 .logout-btn { background: #ff4d4d; color: #fff; border: none; padding: 12px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-.logout-btn:hover { background: #cc0000; transform: translateY(-2px); }
-.footer { margin: 60px 0 30px; text-align: center; color: #777; font-size: 14px; }
+.logout-btn:hover { background: #cc0000; }
+.footer { margin-top: 50px; text-align: center; color: #777; font-size: 14px; }
 </style>
 </head>
 <body>
-
 <div id="dashboard">
   <div class="hero">
     <h1>Welcome, <span id="user-display">Reader</span>!</h1>
-    <p>This is your private library space.</p>
+    <p>Your library is ready.</p>
   </div>
-
-  <div class="section">
-    <div class="card">
-      <h2>Your Dashboard</h2>
-      <p id="user-email" style="color: #a78bfa; margin-bottom: 20px;"></p>
-      <div style="border: 2px dashed rgba(167,139,250,0.3); padding: 40px; border-radius: 15px; margin-bottom: 20px;">
-        <p>PDF Upload Section Coming Soon...</p>
-      </div>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
+  <div class="card">
+    <h2>Library</h2>
+    <p id="user-email" style="color: #a78bfa;"></p>
+    <div style="border: 2px dashed rgba(167,139,250,0.3); padding: 30px; border-radius: 15px; margin: 20px 0;">
+      PDF Upload Section Coming Soon...
     </div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
   </div>
 </div>
-
 <div class="footer">powered by •ＵᏒ-１３•𓂀</div>
 
 <script type="module">
@@ -59,22 +52,19 @@ const auth = getAuth(app);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    const providerId = user.providerData[0]?.providerId || '';
-    if (user.emailVerified || providerId === 'google.com') {
-      document.getElementById('user-display').innerText = user.displayName || user.email?.split('@')[0] || 'Reader';
-      document.getElementById('user-email').innerText = user.email || '';
+    if (user.emailVerified || user.providerData[0].providerId === 'google.com') {
+      document.getElementById('user-display').innerText = user.displayName || user.email.split('@')[0];
+      document.getElementById('user-email').innerText = user.email;
     } else {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     }
   } else {
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
   }
 });
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
-  signOut(auth).then(() => {
-    window.location.href = 'login.html';
-  });
+  signOut(auth).then(() => { window.location.href = 'index.html'; });
 });
 </script>
 </body>
