@@ -7,8 +7,8 @@
 <style>
 body{margin:0;font-family:Arial,sans-serif;background:#0b0c27;display:flex;justify-content:center;align-items:center;height:100vh;color:white;}
 .box{background:#1e1f3f;padding:30px;border-radius:12px;width:300px;text-align:center;}
-input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;box-sizing: border-box;}
-button{width:100%;padding:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;}
+input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;box-sizing: border-box;color: black;}
+button{width:100%;padding:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;font-weight: bold;}
 button:hover{background:#c084fc;}
 a{color:#3b82f6;text-decoration:none;font-size:14px;}
 </style>
@@ -17,8 +17,8 @@ a{color:#3b82f6;text-decoration:none;font-size:14px;}
 
 <div class="box">
   <h2>Register</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
+  <input type="email" id="email" placeholder="Email" autocomplete="email">
+  <input type="password" id="password" placeholder="Password" autocomplete="new-password">
   <button id="btn">Sign Up</button>
   <br><br>
   <a href="login.html">Already have an account? Login</a>
@@ -28,6 +28,7 @@ a{color:#3b82f6;text-decoration:none;font-size:14px;}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// تحذير: هذه البيانات يجب أن تطابق ما في Firebase Console تماماً
 const firebaseConfig = {
   apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
   authDomain: "book-club-13.firebaseapp.com",
@@ -40,20 +41,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const emailInput = document.getElementById('email');
-const passInput = document.getElementById('password');
-const btn = document.getElementById('btn');
+document.getElementById('btn').addEventListener("click", () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-btn.addEventListener("click", () => {
-  const email = emailInput.value;
-  const password = passInput.value;
+  if (!email || !password) {
+    alert("Please enter email and password");
+    return;
+  }
 
   createUserWithEmailAndPassword(auth, email, password)
   .then(() => {
+    alert("Success!");
     window.location.href = "index.html";
   })
   .catch((err) => {
-    alert(err.code + " : " + err.message);
+    console.error(err);
+    alert("Error: " + err.message);
   });
 });
 </script>
