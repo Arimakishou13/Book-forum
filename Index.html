@@ -45,7 +45,6 @@ button:active{transform:scale(0.95);}
 <div class="navbar">
   <h2>Home</h2>
   <div class="nav-links">
-    <a href="register.html">Register</a>
     <a href="profile.html" id="profileLink">
       <span id="profileNameNav">Guest</span>
       <img id="profileIcon" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile">
@@ -62,7 +61,8 @@ button:active{transform:scale(0.95);}
   <div class="login-card" id="loginCard">
     <input type="email" id="emailInput" placeholder="Email">
     <input type="password" id="passInput" placeholder="Password">
-    <button id="loginBtn">Login / Register</button>
+    <button id="loginBtn">Login</button>
+    <button id="registerBtn">Register</button>
   </div>
 </div>
 
@@ -84,8 +84,8 @@ const firebaseConfig = {
   authDomain: "book-club-13.firebaseapp.com",
   projectId: "book-club-13",
   storageBucket: "book-club-13.appspot.com",
-  messagingSenderId: "PUT_SENDER_ID_HERE",
-  appId: "PUT_APP_ID_HERE"
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -98,10 +98,13 @@ const profileLink = document.getElementById("profileLink");
 const showLogin = document.getElementById("showLogin");
 const loginCard = document.getElementById("loginCard");
 const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
 const emailInput = document.getElementById("emailInput");
 const passInput = document.getElementById("passInput");
 
-showLogin.addEventListener("click",()=>{loginCard.style.display="flex";});
+showLogin.addEventListener("click",()=>{
+  loginCard.style.display = loginCard.style.display === "flex" ? "none" : "flex";
+});
 
 onAuthStateChanged(auth,user=>{
   if(user){
@@ -112,7 +115,7 @@ onAuthStateChanged(auth,user=>{
   } else {
     profileIcon.src="https://cdn-icons-png.flaticon.com/512/149/149071.png";
     profileNameNav.textContent="Guest";
-    profileLink.href="register.html";
+    profileLink.href="#";
   }
 });
 
@@ -121,11 +124,15 @@ loginBtn.addEventListener("click",()=>{
   const password = passInput.value;
   signInWithEmailAndPassword(auth,email,password)
     .then(()=>alert("Logged in 🔥"))
-    .catch(()=>{
-      createUserWithEmailAndPassword(auth,email,password)
-        .then(()=>alert("Account created ✅"))
-        .catch(err=>alert(err.message));
-    });
+    .catch(err=>alert("Login failed: "+err.message));
+});
+
+registerBtn.addEventListener("click",()=>{
+  const email = emailInput.value;
+  const password = passInput.value;
+  createUserWithEmailAndPassword(auth,email,password)
+    .then(()=>alert("Account created ✅"))
+    .catch(err=>alert("Registration failed: "+err.message));
 });
 </script>
 
@@ -138,12 +145,14 @@ modeBtn.addEventListener("click", () => {
 });
 
 const cards=document.querySelectorAll(".card");
-window.addEventListener("scroll",()=>{
+function showCards(){
   cards.forEach(card=>{
     const top=card.getBoundingClientRect().top;
     if(top<window.innerHeight-100){card.classList.add("show");}
   });
-});
+}
+window.addEventListener("scroll",showCards);
+window.addEventListener("load",showCards);
 </script>
 
 </body>
