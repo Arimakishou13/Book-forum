@@ -7,17 +7,21 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;overflow-x:hidden;}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 50px;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(200,132,252,0.3);}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 50px;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(200,132,252,0.3);}
 .navbar h2{color:#c084fc;font-size:28px;}
 .nav-links{display:flex;align-items:center;gap:20px;}
-.nav-links a{color:white;text-decoration:none;font-weight:bold;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;transition:0.3s;background:rgba(255,255,255,0.05);}
+.nav-links a{color:white;text-decoration:none;font-weight:bold;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;transition:.3s;background:rgba(255,255,255,0.05);}
 .nav-links a:hover{background:rgba(168,85,247,0.2);}
 .nav-links img{width:40px;height:40px;border-radius:50%;border:2px solid #c084fc;object-fit:cover;}
-.hero{text-align:center;padding:120px 20px;}
-.hero h1{font-size:50px;color:#d8b4fe;animation:fadeUp 1s ease;}
-.hero p{color:#ccc;animation:fadeUp 1.5s ease;}
-.go-login{display:inline-block;margin-top:30px;padding:20px 50px;font-size:22px;font-weight:bold;color:white;background:linear-gradient(135deg,#a855f7,#c084fc);border-radius:15px;cursor:pointer;transition:.3s;box-shadow:0 10px 25px rgba(168,85,247,0.6);animation:bounce 1s infinite alternate;}
+.hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px;}
+.hero h1{font-size:48px;color:#d8b4fe;margin-bottom:15px;animation:fadeUp 1s ease;}
+.hero p{color:#ccc;margin-bottom:25px;animation:fadeUp 1.2s ease;}
+.go-login{display:inline-block;padding:18px 50px;font-size:20px;font-weight:bold;color:white;background:linear-gradient(135deg,#a855f7,#c084fc);border-radius:15px;cursor:pointer;transition:.3s;box-shadow:0 10px 25px rgba(168,85,247,0.6);animation:bounce 1s infinite alternate;}
 .go-login:hover{transform:scale(1.1);box-shadow:0 15px 30px rgba(168,85,247,0.8);}
+.login-card{background:rgba(30,31,63,0.95);padding:30px;border-radius:20px;width:350px;margin-top:30px;display:none;flex-direction:column;align-items:center;box-shadow:0 10px 25px rgba(168,85,247,0.5);}
+.login-card input{width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;}
+.login-card button{width:100%;padding:12px;margin-top:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;transition:.3s;}
+.login-card button:hover{background:#c084fc;}
 .section{padding:60px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
 .card{background:rgba(255,255,255,0.05);padding:25px;border-radius:15px;transform:translateY(50px);opacity:0;transition:.6s;}
 .card.show{transform:translateY(0);opacity:1;}
@@ -42,9 +46,15 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
 </div>
 
 <div class="hero">
-  <h1>Step Into New Worlds</h1>
-  <p>Discover books, connect with readers, and start your journey today.</p>
-  <div class="go-login" onclick="location.href='login.html'">Go to Login</div>
+  <h1>Welcome to Book's Club</h1>
+  <p>Explore books, join discussions, and connect with fellow readers.</p>
+  <div class="go-login" id="showLogin">Go to Login</div>
+
+  <div class="login-card" id="loginCard">
+    <input type="email" id="emailInput" placeholder="Email">
+    <input type="password" id="passInput" placeholder="Password">
+    <button id="loginBtn">Login / Register</button>
+  </div>
 </div>
 
 <div class="section">
@@ -58,7 +68,7 @@ body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
@@ -76,15 +86,37 @@ const profileIcon = document.getElementById("profileIcon");
 const profileNameNav = document.getElementById("profileNameNav");
 const profileLink = document.getElementById("profileLink");
 
-onAuthStateChanged(auth, user => {
+const showLogin = document.getElementById("showLogin");
+const loginCard = document.getElementById("loginCard");
+const loginBtn = document.getElementById("loginBtn");
+const emailInput = document.getElementById("emailInput");
+const passInput = document.getElementById("passInput");
+
+showLogin.addEventListener("click",()=>{loginCard.style.display="flex";});
+
+onAuthStateChanged(auth,user=>{
   if(user){
     profileIcon.src = user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     profileNameNav.textContent = user.displayName || user.email.split('@')[0];
+    profileLink.href="profile.html";
+    loginCard.style.display="none";
   } else {
-    profileIcon.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-    profileNameNav.textContent = "Guest";
-    profileLink.href = "login.html";
+    profileIcon.src="https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    profileNameNav.textContent="Guest";
+    profileLink.href="login.html";
   }
+});
+
+loginBtn.addEventListener("click",()=>{
+  const email = emailInput.value;
+  const password = passInput.value;
+  signInWithEmailAndPassword(auth,email,password)
+    .then(()=>alert("Logged in 🔥"))
+    .catch(()=>{
+      createUserWithEmailAndPassword(auth,email,password)
+        .then(()=>alert("Account created ✅"))
+        .catch(err=>alert(err.message));
+    });
 });
 </script>
 
