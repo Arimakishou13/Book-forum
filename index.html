@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book's Club</title>
+<title>Dashboard - Book's Club</title>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 * { box-sizing: border-box; }
@@ -12,45 +12,38 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #0b0b0f; colo
 .hero h1 { font-size: 38px; }
 .hero span { color: #a78bfa; }
 .hero p { color: #aaa; }
-.section { width: 90%; max-width: 500px; margin: 100px auto; opacity: 0; transform: translateX(-60px); transition: all 0.7s ease; }
-.section.right { transform: translateX(60px); }
-.section.show { opacity: 1; transform: translateX(0); }
-.section h2 { color: #c4b5fd; margin-bottom: 10px; }
-.section p { color: #aaa; }
-.card { width: 100%; background: rgba(30, 20, 50, 0.6); padding: 25px; border-radius: 18px; backdrop-filter: blur(12px); box-shadow: 0 0 40px rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.2); }
-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: none; background: #1a1325; color: #fff; transition: 0.3s; }
-input:focus { outline: none; background: #221933; box-shadow: 0 0 10px rgba(167,139,250,0.4); }
-button { width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
-button:hover { transform: translateY(-2px); box-shadow: 0 0 15px rgba(167,139,250,0.5); }
-.footer { margin: 120px 0 30px; text-align: center; color: #777; font-size: 14px; }
-#dashboard { display: none; text-align: center; padding: 50px 20px; }
-.logout-btn { background: #ff4d4d; margin-top: 20px; width: auto; padding: 10px 30px; }
-.swal2-popup { background: #1a1325 !important; color: #fff !important; border-radius: 18px !important; border: 1px solid rgba(167,139,250,0.2) !important; }
-.swal2-title, .swal2-html-container { color: #fff !important; }
-.swal2-confirm { background: linear-gradient(135deg, #a78bfa, #7c3aed) !important; border-radius: 10px !important; }
+.section { width: 90%; max-width: 500px; margin: 40px auto; opacity: 1; }
+.card { width: 100%; background: rgba(30, 20, 50, 0.6); padding: 25px; border-radius: 18px; backdrop-filter: blur(12px); box-shadow: 0 0 40px rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.2); text-align: center; }
+.logout-btn { background: #ff4d4d; color: #fff; border: none; padding: 12px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+.logout-btn:hover { background: #cc0000; transform: translateY(-2px); }
+.footer { margin: 60px 0 30px; text-align: center; color: #777; font-size: 14px; }
 </style>
 </head>
 <body>
 
-<div id="auth-ui">
-  <div class="hero">
-    <h1>Welcome to <span>Book's Club</span></h1>
-    <p>Your personal reading world</p>
-  </div>
-  <div class="section show"><div class="card"><h2>Login / Sign Up</h2><input type="email" id="email" placeholder="Email"><input type="password" id="password" placeholder="Password"><button id="loginBtn">Continue</button></div></div>
-</div>
-
 <div id="dashboard">
-  <div class="hero"><h1>Welcome, <span id="user-display">Reader</span>!</h1><p>Your private space.</p></div>
-  <div class="section show"><div class="card"><h2>Your Dashboard</h2><p>Library coming soon...</p><button class="logout-btn" id="logoutBtn">Logout</button></div></div>
+  <div class="hero">
+    <h1>Welcome, <span id="user-display">Reader</span>!</h1>
+    <p>This is your private library space.</p>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <h2>Your Dashboard</h2>
+      <p id="user-email" style="color: #a78bfa; margin-bottom: 20px;"></p>
+      <div style="border: 2px dashed rgba(167,139,250,0.3); padding: 40px; border-radius: 15px; margin-bottom: 20px;">
+        <p>PDF Upload Section Coming Soon...</p>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
 </div>
 
 <div class="footer">powered by •ＵᏒ-１３•𓂀</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
@@ -66,45 +59,21 @@ const auth = getAuth(app);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    if (user.emailVerified) {
-      document.getElementById('auth-ui').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      document.getElementById('user-display').innerText = user.email.split('@')[0];
+    if (user.emailVerified || user.providerData[0].providerId === 'google.com') {
+      document.getElementById('user-display').innerText = user.displayName || user.email.split('@')[0];
+      document.getElementById('user-email').innerText = user.email;
     } else {
-      Swal.fire({ icon: 'warning', title: 'Verify Your Email', text: 'Please check your inbox and verify your email before logging in.' });
-      signOut(auth);
+      window.location.href = 'login.html';
     }
   } else {
-    document.getElementById('auth-ui').style.display = 'block';
-    document.getElementById('dashboard').style.display = 'none';
+    window.location.href = 'login.html';
   }
 });
 
-document.getElementById("loginBtn").addEventListener("click", () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  if(!email || !password) return;
-
-  Swal.fire({ title: 'Connecting...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => { Swal.close(); })
-    .catch((error) => {
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-          createUserWithEmailAndPassword(auth, email, password)
-            .then((res) => {
-              sendEmailVerification(res.user);
-              Swal.fire({ icon: 'success', title: 'Account Created', text: 'Verify link sent to your email! ✅' });
-            })
-            .catch(err => Swal.fire({ icon: 'error', title: 'Error', text: err.message }));
-      } else {
-          Swal.fire({ icon: 'error', title: 'Error', text: error.message });
-      }
-    });
-});
-
 document.getElementById("logoutBtn").addEventListener("click", () => {
-  signOut(auth).then(() => { Swal.fire({ icon: 'info', title: 'Logged out', timer: 1500, showConfirmButton: false }); });
+  signOut(auth).then(() => {
+    window.location.href = 'login.html';
+  });
 });
 </script>
 </body>
