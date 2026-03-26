@@ -62,34 +62,43 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
+// Google Sign-In
 document.getElementById('googleBtn').onclick = () => {
     signInWithPopup(auth, googleProvider)
         .then(() => { window.location.href = 'index.html'; })
         .catch(err => Swal.fire({ icon: 'error', text: err.message }));
 };
 
+// Login with Email/Password
 document.getElementById('loginBtn').onclick = () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    if(!email || !password) return;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if(!email || !password) return Swal.fire({ icon: 'warning', text: 'Please fill in all fields!' });
+    
     Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
     signInWithEmailAndPassword(auth, email, password)
         .then((res) => {
-            if(res.user.emailVerified) { window.location.href = 'index.html'; }
-            else { Swal.fire({ icon: 'warning', text: 'Verify your email first!' }); }
+            if(res.user.emailVerified || res.user.providerData[0]?.providerId === 'google.com') {
+                window.location.href = 'index.html';
+            } else {
+                Swal.fire({ icon: 'warning', text: 'Verify your email first!' });
+            }
         })
         .catch(() => Swal.fire({ icon: 'error', text: 'Account not found or wrong password' }));
 };
 
+// Register new account
 document.getElementById('registerBtn').onclick = () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    if(!email || !password) return;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if(!email || !password) return Swal.fire({ icon: 'warning', text: 'Please fill in all fields!' });
+    
     Swal.fire({ title: 'Creating Account...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
     createUserWithEmailAndPassword(auth, email, password)
         .then((res) => {
-            sendEmailVerification(res.user);
-            Swal.fire({ icon: 'success', title: 'Check your email', text: 'Verification link sent! ✅' });
+            sendEmailVerification(res.user).then(() => {
+                Swal.fire({ icon: 'success', title: 'Check your email', text: 'Verification link sent! ✅' });
+            });
         })
         .catch(err => Swal.fire({ icon: 'error', text: err.message }));
 };
