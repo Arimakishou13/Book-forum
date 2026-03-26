@@ -1,13 +1,14 @@
-import { initializeApp } from "firebase/app";
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCsKcXAntIIrm-BEgfc12dykBby2SmUY48",
+  authDomain: "book-club-13.firebaseapp.com",
+  projectId: "book-club-13",
+  storageBucket: "book-club-13.appspot.com",
+  messagingSenderId: "1000248881",
+  appId: "1:1000248881:web:7531778995a97576f3f009" 
 };
 
 const app = initializeApp(firebaseConfig);
@@ -17,5 +18,6 @@ const appCheck = initializeAppCheck(app, {
   isTokenAutoRefreshEnabled: true
 });
 
-export { app, appCheck };
+const auth = getAuth(app);
 
+export { app, auth, appCheck };
