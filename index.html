@@ -59,9 +59,10 @@ const auth = getAuth(app);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    if (user.emailVerified || user.providerData[0].providerId === 'google.com') {
-      document.getElementById('user-display').innerText = user.displayName || user.email.split('@')[0];
-      document.getElementById('user-email').innerText = user.email;
+    const providerId = user.providerData[0]?.providerId || '';
+    if (user.emailVerified || providerId === 'google.com') {
+      document.getElementById('user-display').innerText = user.displayName || user.email?.split('@')[0] || 'Reader';
+      document.getElementById('user-email').innerText = user.email || '';
     } else {
       window.location.href = 'login.html';
     }
