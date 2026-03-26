@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Book's Club</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#0b0c27;display:flex;justify-content:center;align-items:center;height:100vh;color:white;}
+.box{background:#1e1f3f;padding:30px;border-radius:12px;width:300px;text-align:center;}
+input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;}
+button{width:100%;padding:10px;background:#3b82f6;border:none;color:white;border-radius:8px;cursor:pointer;}
+button:hover{background:#2563eb;}
+a{color:#3b82f6;text-decoration:none;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Login</h2>
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Password">
+  <button>Login</button>
+  <br><br>
+  <a href="register.html">Don't have an account? Sign up</a>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "PUT YOUR API KEY",
+  authDomain: "PUT YOUR DOMAIN",
+  projectId: "PUT YOUR ID",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const emailInput=document.querySelector('input[type="email"]');
+const passInput=document.querySelector('input[type="password"]');
+const btn=document.querySelector('button');
+
+btn.addEventListener("click",()=>{
+  const email=emailInput.value;
+  const password=passInput.value;
+  signInWithEmailAndPassword(auth,email,password)
+  .then(()=>{window.location.href="home.html";})
+  .catch(()=>{createUserWithEmailAndPassword(auth,email,password).then(()=>window.location.href="home.html").catch(err=>alert(err.message));});
+});
+</script>
+
+</body>
+</html>
