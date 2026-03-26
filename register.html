@@ -14,11 +14,12 @@ a{color:#3b82f6;text-decoration:none;font-size:14px;}
 </style>
 </head>
 <body>
+
 <div class="box">
   <h2>Register</h2>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
-  <button id="signUpBtn">Sign Up</button>
+  <button id="btn">Sign Up</button>
   <br><br>
   <a href="login.html">Already have an account? Login</a>
 </div>
@@ -27,14 +28,13 @@ a{color:#3b82f6;text-decoration:none;font-size:14px;}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// استبدل الـ App ID والـ Sender ID بالقيم الحقيقية من إعدادات مشروعك في Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
   authDomain: "book-club-13.firebaseapp.com",
   projectId: "book-club-13",
   storageBucket: "book-club-13.appspot.com",
-  messagingSenderId: "ضع_الرقم_هنا", 
-  appId: "ضع_الـ_ID_هنا"
+  messagingSenderId: "1018302148731", 
+  appId: "1:1018302148731:web:e4f3a9e7d9b7c2a1e0d3f4"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -42,24 +42,18 @@ const auth = getAuth(app);
 
 const emailInput = document.getElementById('email');
 const passInput = document.getElementById('password');
-const btn = document.getElementById('signUpBtn');
+const btn = document.getElementById('btn');
 
 btn.addEventListener("click", () => {
   const email = emailInput.value;
   const password = passInput.value;
 
-  if(!email || !password) {
-      alert("Please fill in all fields");
-      return;
-  }
-
   createUserWithEmailAndPassword(auth, email, password)
   .then(() => {
-      window.location.href = "index.html";
+    window.location.href = "index.html";
   })
   .catch((err) => {
-      alert(err.message);
-      console.error(err);
+    alert(err.code + " : " + err.message);
   });
 });
 </script>
