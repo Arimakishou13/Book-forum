@@ -7,19 +7,18 @@
 <style>
 body{margin:0;font-family:Arial,sans-serif;background:#0b0c27;display:flex;justify-content:center;align-items:center;height:100vh;color:white;}
 .box{background:#1e1f3f;padding:30px;border-radius:12px;width:300px;text-align:center;}
-input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;box-sizing: border-box;color: black;}
-button{width:100%;padding:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;font-weight: bold;}
+input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;}
+button{width:100%;padding:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;}
 button:hover{background:#c084fc;}
 a{color:#3b82f6;text-decoration:none;font-size:14px;}
 </style>
 </head>
 <body>
-
 <div class="box">
   <h2>Register</h2>
-  <input type="email" id="email" placeholder="Email" autocomplete="email">
-  <input type="password" id="password" placeholder="Password" autocomplete="new-password">
-  <button id="btn">Sign Up</button>
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Password">
+  <button>Sign Up</button>
   <br><br>
   <a href="login.html">Already have an account? Login</a>
 </div>
@@ -33,33 +32,24 @@ const firebaseConfig = {
   authDomain: "book-club-13.firebaseapp.com",
   projectId: "book-club-13",
   storageBucket: "book-club-13.appspot.com",
-  messagingSenderId: "1018302148731", 
-  appId: "1:1018302148731:web:e4f3a9e7d9b7c2a1e0d3f4"
+  messagingSenderId: "PUT_SENDER_ID_HERE",
+  appId: "PUT_APP_ID_HERE"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-document.getElementById('btn').addEventListener("click", () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+const emailInput=document.querySelector('input[type="email"]');
+const passInput=document.querySelector('input[type="password"]');
+const btn=document.querySelector('button');
 
-  if (!email || !password) {
-    alert("Please enter email and password");
-    return;
-  }
-
-  createUserWithEmailAndPassword(auth, email, password)
-  .then(() => {
-    alert("Success!");
-    window.location.href = "index.html";
-  })
-  .catch((err) => {
-    console.error(err);
-    alert("Error: " + err.message);
-  });
+btn.addEventListener("click",()=>{
+  const email=emailInput.value;
+  const password=passInput.value;
+  createUserWithEmailAndPassword(auth,email,password)
+  .then(()=>{window.location.href="index.html";})
+  .catch(err=>alert(err.message));
 });
 </script>
-
 </body>
 </html>
