@@ -5,33 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profile - Book's Club</title>
 <style>
-body{margin:0;font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;display:flex;justify-content:center;align-items:center;height:100vh;}
-.container{background:rgba(30,31,63,0.95);padding:40px;border-radius:15px;width:350px;text-align:center;}
-.container img{width:120px;height:120px;border-radius:50%;border:3px solid #c084fc;}
-.container h2{margin:15px 0;color:#d8b4fe;}
-.container p{color:#aaa;margin-bottom:15px;}
-input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:8px;}
-button{width:100%;padding:10px;margin-top:10px;background:#a855f7;border:none;color:white;border-radius:8px;cursor:pointer;}
-button:hover{background:#c084fc;}
-a{display:block;margin-top:15px;color:#3b82f6;text-decoration:none;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#140a26,#2b1457);color:white;display:flex;flex-direction:column;align-items:center;min-height:100vh;}
+.navbar{width:100%;display:flex;justify-content:space-between;align-items:center;padding:15px 50px;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);border-bottom:1px solid rgba(200,132,252,0.3);}
+.navbar h2{color:#c084fc;font-size:28px;cursor:pointer;}
+.profile-card{background:rgba(30,31,63,0.95);padding:40px;border-radius:25px;margin-top:50px;display:flex;flex-direction:column;align-items:center;box-shadow:0 15px 30px rgba(168,85,247,0.6);width:350px;}
+.profile-card img{width:120px;height:120px;border-radius:50%;border:3px solid #c084fc;object-fit:cover;margin-bottom:15px;transition:.3s;}
+.profile-card img:hover{transform:scale(1.1);}
+.profile-card h2{color:#d8b4fe;margin-bottom:5px;}
+.profile-card p{color:#ccc;margin-bottom:15px;}
+.profile-card input[type="file"]{display:none;}
+.change-btn{padding:10px 20px;background:linear-gradient(135deg,#a855f7,#c084fc);border:none;color:white;border-radius:10px;cursor:pointer;transition:.3s;margin-bottom:10px;}
+.change-btn:hover{transform:scale(1.05);box-shadow:0 8px 20px rgba(168,85,247,0.5);}
+.footer{text-align:center;padding:25px;color:#aaa;margin-top:auto;}
 </style>
 </head>
 <body>
 
-<div class="container">
-  <img id="profileImg" src="https://via.placeholder.com/120" alt="Profile">
-  <h2 id="profileName">Guest</h2>
-  <p id="profileUsername">guest</p>
-  <input type="text" id="newUsername" placeholder="Change username">
-  <input type="file" id="newImg">
-  <button id="saveBtn">Save</button>
-  <button id="logoutBtn">Logout</button>
-  <a href="index.html">Back to Home</a>
+<div class="navbar">
+  <h2 onclick="location.href='index.html'">Home</h2>
 </div>
+
+<div class="profile-card">
+  <img id="profileImage" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
+  <h2 id="profileName">Guest</h2>
+  <p id="profileUsername">@guest</p>
+  <label class="change-btn" for="fileUpload">Change Photo</label>
+  <input type="file" id="fileUpload" accept="image/*">
+</div>
+
+<div class="footer">powered by •ＵᏒ-１３•𓂀</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCSKcXAntIIrm-BEgfCi2dykBby2SMuY48",
@@ -45,37 +52,36 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const profileImg = document.getElementById("profileImg");
+const profileImage = document.getElementById("profileImage");
 const profileName = document.getElementById("profileName");
 const profileUsername = document.getElementById("profileUsername");
-const newUsername = document.getElementById("newUsername");
-const newImg = document.getElementById("newImg");
-const saveBtn = document.getElementById("saveBtn");
-const logoutBtn = document.getElementById("logoutBtn");
+const fileUpload = document.getElementById("fileUpload");
 
 onAuthStateChanged(auth, user => {
   if(user){
-    profileImg.src = user.photoURL || "https://via.placeholder.com/120";
-    profileName.textContent = user.displayName || "No Name";
-    profileUsername.textContent = user.email.split('@')[0];
+    profileImage.src = user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    profileName.textContent = user.displayName || user.email.split('@')[0];
+    profileUsername.textContent = '@' + (user.displayName?.toLowerCase().replace(/\s/g,'') || user.email.split('@')[0]);
   } else {
-    window.location.href = "login.html";
+    alert("You must log in first!");
+    location.href = "index.html";
   }
 });
 
-saveBtn.addEventListener("click",()=>{
-  const file = newImg.files[0];
-  const username = newUsername.value;
-  if(auth.currentUser){
-    updateProfile(auth.currentUser,{
-      displayName: username || auth.currentUser.displayName,
-      photoURL: file ? URL.createObjectURL(file) : auth.currentUser.photoURL
-    }).then(()=>location.reload());
+fileUpload.addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(evt){
+      profileImage.src = evt.target.result;
+    }
+    reader.readAsDataURL(file);
+    if(auth.currentUser){
+      updateProfile(auth.currentUser,{photoURL: URL.createObjectURL(file)})
+      .then(()=>console.log("Profile photo updated"))
+      .catch(err=>console.log(err));
+    }
   }
-});
-
-logoutBtn.addEventListener("click",()=>{
-  signOut(auth).then(()=>window.location.href="index.html");
 });
 </script>
 
