@@ -1,13 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Book's Club</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book's Club</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+}
+
+.navbar h2 {
+  margin: 0;
+  color: #c084fc;
+}
+
+.navbar a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero h1 {
+  font-size: 40px;
+  color: #d8b4fe;
+}
+
+.hero p {
+  color: #ddd;
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: #a855f7;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.section {
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: rgba(168,85,247,0.2);
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #aaa;
+}
+</style>
+
 </head>
-<body style="background:#0f172a; color:white; text-align:center;">
+<body>
 
-  <h1>Welcome to Book's Club</h1>
+<div class="navbar">
+  <h2>Book's Club</h2>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+  </div>
+</div>
 
-  <a href="login.html" style="color:#3b82f6;">Go to Login</a>
+<div class="hero">
+  <h1>Explore Worlds Through Books</h1>
+  <p>Join our community, discover new books, and share your thoughts</p>
+  <button class="btn" onclick="location.href='login.html'">Start Now</button>
+</div>
+
+<div class="section">
+  <div class="card">
+    <h3>📚 Novels</h3>
+    <p>Explore the best fiction stories.</p>
+  </div>
+
+  <div class="card">
+    <h3>🧠 Self Development</h3>
+    <p>Grow your mindset and skills.</p>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Mystery</h3>
+    <p>Dive into thrilling mysteries.</p>
+  </div>
+
+  <div class="card">
+    <h3>💬 Community</h3>
+    <p>Share and discuss with readers.</p>
+  </div>
+</div>
+
+<div class="footer">
+  powered by •ＵᏒ-１３•𓂀
+</div>
 
 </body>
 </html>
