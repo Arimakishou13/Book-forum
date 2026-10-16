@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile · Book's Club</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="layout.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body>
+<header><div class="wrap bar">
+  <a class="brand" href="index.html">Book's Club</a>
+  <a class="navlink" href="index.html">Forum</a>
+  <button class="btn" id="theme" aria-label="Switch light or dark theme">Theme</button>
+  <div id="auth"></div>
+</div></header>
+
+<main class="page" id="profile" aria-live="polite"></main>
+
+<dialog id="editDlg">
+  <h2>Edit profile</h2>
+  <form id="editForm">
+    <label class="field"><span>Display name</span><input id="eName" required maxlength="30"></label>
+    <label class="field"><span>Bio</span><textarea id="eBio" class="short" maxlength="200"></textarea></label>
+    <label class="field"><span>Favourite books (up to 5, separated by commas)</span><input id="eFavs" maxlength="300"></label>
+    <div class="field"><span>Avatar colour</span><div class="swatches" id="swatches"></div></div>
+    <div class="row"><button type="button" class="btn" data-close>Cancel</button><button class="btn primary">Save changes</button></div>
+  </form>
+</dialog>
+
+<script type="module" src="profile.js"></script>
+</body>
+</html>

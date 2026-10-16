@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function otherUser(users) { return users[0] == request.auth.uid ? users[1] : users[0]; }
+
+    // ---- Profiles ----
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0 && request.resource.data.displayName.size() <= 30
+        && request.resource.data.bio is string && request.resource.data.bio.size() <= 200
+        && request.resource.data.favorites is list && request.resource.data.favorites.size() <= 5;
+      allow delete: if false;
+    }
+
+    // ---- Friend requests: id is "{from}_{to}" ----
+    match /friendRequests/{id} {
+      allow get: if signedIn() && request.auth.uid in id.split('_');
+      allow list: if signedIn()
+        && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.from == request.auth.uid
+        && request.resource.data.to != request.auth.uid
+        && id == request.auth.uid + '_' + request.resource.data.to;
+      allow delete: if signedIn() && request.auth.uid in id.split('_');
+    }
+
+    // ---- Friendships: id is "{uidA}_{uidB}" with uidA < uidB ----
+    match /friendships/{id} {
+      allow get: if signedIn() && request.auth.uid in id.split('_');
+      allow list: if signedIn() && request.auth.uid in resource.data.users;
+      // Only the person who received a request can accept it.
+      allow create: if signedIn()
+        && request.resource.data.users.size() == 2
+        && request.resource.data.users[0] < request.resource.data.users[1]
+        && id == request.resource.data.users[0] + '_' + request.resource.data.users[1]
+        && request.auth.uid in request.resource.data.users
+        && exists(/databases/$(database)/documents/friendRequests/$(otherUser(request.resource.data.users) + '_' + request.auth.uid));
+      allow delete: if signedIn() && request.auth.uid in id.split('_');
+    }
+
+    // ---- Forum ----
+    match /posts/{postId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.title is string && request.resource.data.title.size() <= 120
+        && request.resource.data.body is string && request.resource.data.body.size() <= 3000;
+
+      // Owner can edit; everyone signed in may only change likes / replyCount.
+      allow update: if signedIn() && (
+        resource.data.uid == request.auth.uid
+        || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes', 'replyCount'])
+      );
+
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if signedIn()
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.body is string && request.resource.data.body.size() <= 1500;
+        allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+      }
+    }
+  }
+}

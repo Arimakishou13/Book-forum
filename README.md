@@ -4,20 +4,29 @@ A community forum for readers. Plain HTML, CSS and ES modules, with Firebase Aut
 
 ## Structure
 
+All files sit in the repository root. Pages link to each other, and the scripts are ES modules that import one another by relative path.
+
 ```
-index.html            page markup and dialogs
-css/base.css          design tokens, reset, buttons
-css/layout.css        header, hero, bookshelf, forum, footer
-css/components.css    posts, dialogs, forms, toast
-js/main.js            entry point
-js/firebase-config.js project settings
-js/firebase.js        Firebase init and re-exports
-js/auth.js            login, register, account area
-js/posts.js           discussion list, create, like, delete
-js/threads.js         discussion dialog and replies
-js/categories.js      categories and bookshelf
-js/state.js           shared state
-js/utils.js           helpers (escape, time, toast, theme)
+index.html            forum page (entry point)
+profile.html          reader profile page
+friends.html          find readers, requests, friends list
+base.css              design tokens, reset, buttons
+layout.css            header, hero, bookshelf, forum, footer
+components.css        posts, dialogs, forms, toast
+pages.css             profile and friends pages
+main.js               entry point of index.html
+profile.js            entry point of profile.html
+friends-page.js       entry point of friends.html
+firebase-config.js    project settings
+firebase.js           Firebase init and re-exports
+auth.js               login, register, account area
+profiles.js           user profile documents and search
+friends.js            friend requests and friendships
+posts.js              discussion list, create, like, delete
+threads.js            discussion dialog and replies
+categories.js         categories and bookshelf
+state.js              shared state
+utils.js              helpers
 firestore.rules       security rules
 ```
 

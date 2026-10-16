@@ -1,0 +1,18 @@
+/* Profile and friends pages */
+.page{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+.page h1{font-size:34px}
+.muted{color:var(--muted)}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.pcard .bio{color:var(--muted);margin:6px 0 14px;overflow-wrap:anywhere;max-width:52ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:14px;background:var(--raised)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.section-title{font-size:22px;margin:34px 0 12px}
+.person{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:10px;flex-wrap:wrap}
+.person>a{color:inherit;font-weight:700;text-decoration:none;margin-right:auto;overflow-wrap:anywhere}
+.person>a:hover{text-decoration:underline}
+.search{display:flex;gap:10px;margin-bottom:14px}
+.search input{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 14px}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatch{width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer;background:var(--c)}
+.swatch[aria-pressed="true"]{border-color:var(--text)}

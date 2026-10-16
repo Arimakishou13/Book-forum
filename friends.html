@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Friends · Book's Club</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="layout.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body>
+<header><div class="wrap bar">
+  <a class="brand" href="index.html">Book's Club</a>
+  <a class="navlink" href="index.html">Forum</a>
+  <button class="btn" id="theme" aria-label="Switch light or dark theme">Theme</button>
+  <div id="auth"></div>
+</div></header>
+
+<main class="page" id="friendsPage">
+  <h1>Friends</h1>
+  <div id="gate"></div>
+  <div id="content" hidden>
+    <h2 class="section-title">Find readers</h2>
+    <form class="search" id="searchForm">
+      <input id="searchIn" type="search" placeholder="Search by display name" aria-label="Search readers by display name">
+      <button class="btn primary">Search</button>
+    </form>
+    <div id="results" aria-live="polite"></div>
+
+    <h2 class="section-title">Requests for you</h2>
+    <div id="incoming"></div>
+    <h2 class="section-title">Requests you sent</h2>
+    <div id="outgoing"></div>
+    <h2 class="section-title">Your friends</h2>
+    <div id="friends"></div>
+  </div>
+</main>
+
+<script type="module" src="friends-page.js"></script>
+</body>
+</html>
