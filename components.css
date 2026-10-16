@@ -1,0 +1,35 @@
+/* Posts, tags, dialogs, forms, tabs, toast */
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px}
+.tag{display:inline-block;font-size:13px;font-weight:700;color:var(--ink);background:var(--accent);border-radius:6px;padding:1px 9px;margin-bottom:8px}
+.post h3{font-size:21px;margin-bottom:6px}
+.post h3 button{background:none;border:0;text-align:left;cursor:pointer;font:inherit}
+.post h3 button:hover{text-decoration:underline}
+.excerpt{color:var(--muted);margin-bottom:12px;overflow-wrap:anywhere}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--muted);font-size:14px}
+.meta .grow{margin-right:auto}
+.liked{border-color:var(--accent);color:var(--accent)}
+.del{color:var(--danger)}
+.empty{text-align:center;color:var(--muted);padding:48px 16px;border:1px dashed var(--line);border-radius:14px}
+.empty .btn{margin-top:14px}
+
+dialog{margin:auto;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--text);padding:26px;width:min(560px,92vw);max-height:90vh;overflow:auto}
+dialog::backdrop{background:rgba(10,5,18,.65)}
+dialog h2{font-size:26px;margin-bottom:14px}
+.field{display:block;margin-bottom:12px}
+.field span{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.field textarea{min-height:120px;resize:vertical}
+.field textarea.short{min-height:80px}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tabs button{flex:1}
+.tabs [aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--ink);font-weight:700}
+.err{color:var(--danger);font-size:14px;min-height:20px;margin-bottom:6px}
+.reply{border-top:1px solid var(--line);padding:12px 0}
+.reply b{margin-right:6px}
+.reply.none{color:var(--muted)}
+.body{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0 16px}
+.reply .body{margin:4px 0 0}
+
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--accent);color:var(--ink);font-weight:700;padding:10px 18px;border-radius:10px;transition:transform .3s;z-index:50}
+#toast.on{transform:translateX(-50%) translateY(0)}
